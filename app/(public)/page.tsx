@@ -40,7 +40,7 @@ export default async function Home() {
         </p>
       </div>
       <div className="w-fit flex gap-x-4">
-        <Link href={"/log-in"}>
+        <Link href={"/sign-in"}>
           <Button className="bg-primary text-primary-foreground text-[10px] md:text-sm">
             Generate Exams
           </Button>
