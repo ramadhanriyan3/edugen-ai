@@ -102,7 +102,7 @@ const SignUpPage = () => {
             </div>
             <Button
               variant="outline"
-              className="w-full border-primary text-primary flex items-center"
+              className="w-full border-primary text-primary flex items-center hover:text-primary-foreground"
             >
               <Image
                 alt="google-icon"

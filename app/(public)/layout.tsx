@@ -5,7 +5,7 @@ import { LuInstagram, LuFacebook, LuTwitter, LuMail } from "react-icons/lu";
 
 const PublicLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="w-full flex flex-col min-h-screen p-4">
+    <div className="w-full max-w-[1440px] mx-auto flex flex-col min-h-screen p-4">
       <nav className="flex justify-between items-center">
         <div className="flex items-end gap-x-2 w-fit">
           <Image

@@ -6,9 +6,9 @@ import FadeInWrapper from "@/components/fadeInWrapper";
 import { Button } from "@/components/ui/button";
 
 export default async function Home() {
-  // const hasil = await getOutput(
-  //   "buatkan saya 2 soal pilihan ganda seni budaya dengan taksonomi bloom c5"
-  // );
+  // const hasil = await getOutput();
+
+  // console.log({ hasil });
 
   return (
     <div className="w-full flex flex-col gap-y-5 md:gap-y-10 justify-center items-center px-5">
