@@ -4,49 +4,52 @@ import Image from "next/image";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+// import { useRouter } from "next/navigation";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import CustomFormField, {
   FormFieldType,
 } from "@/components/form/customFormField";
-import { signIn } from "@/actions/signIn.action";
-import FadeInWrapper from "@/components/fadeInWrapper";
-import Link from "next/link";
 
 const formSchema = z.object({
+  name: z.string().min(2, {
+    message: "Pasword must be at least 6 characters.",
+  }),
   email: z.string().email(),
+  password: z
+    .string()
+    .min(8, {
+      message: "Pasword must be at least 6 characters.",
+    })
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
 });
 
-const SignInPage = () => {
+const SignUpPage = () => {
+  // const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
+      password: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const formData = new FormData();
-    Object.entries(values).forEach(([key, value]) =>
-      formData.append(key, value)
-    );
-    await signIn("nodemailer", formData, "/e");
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log({ values });
   };
 
   return (
-    <div className="flex-1 bg-transparent items-center justify-center flex flex-col gap-10">
-      <FadeInWrapper variant="top">
-        <h1 className="text-2xl font-bold text-primary text-center max-w-[400px] drop-shadow-sm shadow-white">
-          Empower Your Teaching Journey with Edugen AI
-        </h1>
-      </FadeInWrapper>
+    <div className="flex-1 bg-transparent items-center justify-center flex">
       <div
-        className="flex flex-col gap-y-4 max-w-md w-10/12 min-h-72
+        className="flex flex-col gap-y-4 w-full max-w-md min-w-72 min-h-72
      bg-white/70
       shadow-md drop-shadow-lg rounded-lg p-5 items-center mx-4"
       >
-        <Link href={"/"} className="flex items-end gap-x-2 w-fit">
+        <div className="flex items-end gap-x-2 w-fit">
           <Image
             alt="logo"
             src={"/eduGen-Logo.png"}
@@ -57,12 +60,20 @@ const SignInPage = () => {
           <h1 className="font-bold leading-none text-base  sm:text-lg text-primary text-center">
             Edugen AI
           </h1>
-        </Link>
+        </div>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="w-full flex flex-col gap-y-4"
           >
+            {/* put form field */}
+            <CustomFormField
+              control={form.control}
+              name="name"
+              label="Full name"
+              placeholder="John de"
+              fieldType={FormFieldType.Input}
+            />
             <CustomFormField
               control={form.control}
               name="email"
@@ -70,15 +81,20 @@ const SignInPage = () => {
               placeholder="example@gmail.com"
               fieldType={FormFieldType.Input}
             />
+            <CustomFormField
+              fieldType={FormFieldType.Password}
+              control={form.control}
+              name="password"
+              label="Password"
+              placeholder="Enter your password"
+            />
 
             <Button
               type="submit"
               className="w-full bg-primary text-primary-foreground"
             >
-              Sign In
+              Sign Up
             </Button>
-<<<<<<< HEAD
-=======
             <div className="flex items-center">
               <hr className="flex-grow border-t border-primary" />
               <span className="px-2 text-sm text-primary">OR</span>
@@ -96,32 +112,11 @@ const SignInPage = () => {
               />{" "}
               Sign in with Google
             </Button>
->>>>>>> 9a7ac32 (feat: add sidebar)
           </form>
         </Form>
-        <div className="flex items-center w-full">
-          <hr className="flex-grow border-t border-primary" />
-          <span className="px-2 text-sm text-primary">OR</span>
-          <hr className="flex-grow border-t border-primary" />
-        </div>
-        <Button
-          variant="outline"
-          onClick={async () => {
-            await signIn("google", undefined, "/e");
-          }}
-          className="w-full border-primary text-primary flex items-center hover:text-primary-foreground"
-        >
-          <Image
-            alt="google-icon"
-            src={"/google-icon.svg"}
-            width={20}
-            height={20}
-          />{" "}
-          Sign in with Google
-        </Button>
       </div>
     </div>
   );
 };
 
-export default SignInPage;
+export default SignUpPage;
