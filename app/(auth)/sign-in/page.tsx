@@ -77,8 +77,6 @@ const SignInPage = () => {
             >
               Sign In
             </Button>
-<<<<<<< HEAD
-=======
             <div className="flex items-center">
               <hr className="flex-grow border-t border-primary" />
               <span className="px-2 text-sm text-primary">OR</span>
@@ -96,7 +94,6 @@ const SignInPage = () => {
               />{" "}
               Sign in with Google
             </Button>
->>>>>>> 9a7ac32 (feat: add sidebar)
           </form>
         </Form>
         <div className="flex items-center w-full">
