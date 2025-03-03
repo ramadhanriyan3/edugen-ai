@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Control } from "react-hook-form";
+import { Control, UseFormSetValue } from "react-hook-form";
 import { ReactNode, useState } from "react";
+import Image from "next/image";
+import { Check, ChevronsUpDown, Eye, EyeClosed } from "lucide-react";
 
 import {
   FormControl,
@@ -18,16 +20,37 @@ import {
   SelectContent,
   SelectTrigger,
   SelectGroup,
+  SelectItem,
 } from "@/components/ui/select";
-import Image from "next/image";
-import { Eye, EyeClosed } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 export enum FormFieldType {
   Select = "SELECT",
   Input = "INPUT",
   Password = "PASSWORD",
   InputNumber = "INPUT_NUMBER",
+  Combobox = "COMBOBOX",
 }
+
+type SelectOptions = {
+  id: string;
+  label: string;
+  value: string;
+};
 
 interface CustomPropsField {
   control: Control<any>;
@@ -40,7 +63,18 @@ interface CustomPropsField {
   disabled?: boolean;
   inputType?: string;
   dateFormat?: string;
+  selectOptions?: SelectOptions[];
   children?: ReactNode;
+  setValue?: UseFormSetValue<{
+    field: string;
+    studentGrade: string;
+    topic: string;
+    questionType: string;
+    lowestDifficullity: string;
+    highestDifficullity: string;
+    numberOfQuestion: string;
+    questionLanguage: string;
+  }>;
 }
 
 const RenderField = ({
@@ -50,10 +84,18 @@ const RenderField = ({
   field: any;
   props: CustomPropsField;
 }) => {
-  const { fieldType, name, label, placeholder, iconSrc, iconAlt, dateFormat } =
-    props;
+  const {
+    fieldType,
+    name,
+    placeholder,
+    iconSrc,
+    iconAlt,
+    selectOptions,
+    setValue,
+  } = props;
 
   const [isShow, setIsShow] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   switch (fieldType) {
     case "INPUT":
@@ -71,7 +113,7 @@ const RenderField = ({
             <Input
               placeholder={placeholder}
               {...field}
-              className="border-0 appearance-none focus:outline-none"
+              className="border-0 appearance-none focus:outline-none placeholder:text-xs sm:placeholder:text-sm"
             />
           </FormControl>
         </div>
@@ -85,7 +127,7 @@ const RenderField = ({
               placeholder={placeholder}
               {...field}
               type={isShow ? "text" : "password"}
-              className="border-0 appearance-none focus:outline-none"
+              className="border-0 appearance-none focus:outline-none placeholder:text-xs sm:placeholder:text-sm"
             />
           </FormControl>
           {isShow ? (
@@ -101,6 +143,100 @@ const RenderField = ({
           )}
         </div>
       );
+
+    case "SELECT":
+      return (
+        <div className="px-1 flex rounded-md border focus-within:border-primary border-slate-400 items-center">
+          <Select
+            onValueChange={field.onChange}
+            value={field.value}
+            name={name}
+          >
+            <FormControl>
+              <SelectTrigger className="border-0 text-xs sm:text-sm">
+                <SelectValue placeholder={placeholder} />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              <SelectGroup>
+                {selectOptions!.map((option) => (
+                  <SelectItem
+                    key={option.id}
+                    value={option.value}
+                    className="text-xs sm:text-sm"
+                  >
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      );
+
+    case "COMBOBOX":
+      return (
+        <div className="px-1 flex rounded-md border focus-within:border-primary border-slate-400 items-center">
+          <Popover open={isOpen} onOpenChange={setIsOpen}>
+            <PopoverTrigger asChild>
+              <FormControl>
+                <Button
+                  variant="ghost"
+                  role="combobox"
+                  className={cn(
+                    "w-full justify-between hover:bg-transparent text-xs sm:text-sm",
+                    !field.value && "text-muted-foreground"
+                  )}
+                >
+                  {field.value
+                    ? selectOptions!.find(
+                        (option) => option.value === field.value
+                      )?.label
+                    : "Select field"}
+                  <ChevronsUpDown className="opacity-50" />
+                </Button>
+              </FormControl>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-0">
+              <Command>
+                <CommandInput
+                  placeholder="Search field..."
+                  className="h-9 text-xs sm:text-sm"
+                />
+                <CommandList>
+                  <CommandEmpty className="text-xs sm:text-sm p-1 sm:p-2 ">
+                    No field found.
+                  </CommandEmpty>
+                  <CommandGroup>
+                    {selectOptions!.map((option) => (
+                      <CommandItem
+                        className="text-xs sm:text-sm"
+                        value={option.value}
+                        key={option.value}
+                        onSelect={() => {
+                          console.log(field.value);
+                          setValue!("field", option.value);
+                          setIsOpen(false);
+                        }}
+                      >
+                        {option.label}
+                        <Check
+                          className={cn(
+                            "ml-auto",
+                            option.value === field.value
+                              ? "opacity-100"
+                              : "opacity-0"
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+      );
   }
 };
 
@@ -112,8 +248,8 @@ const CustomFormField = (props: CustomPropsField) => {
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex-1">
-          <FormLabel>{label}</FormLabel>
+        <FormItem className="flex-1 ">
+          <FormLabel className="text-xs sm:text-sm">{label}</FormLabel>
           <RenderField field={field} props={props} />
           <FormMessage />
         </FormItem>

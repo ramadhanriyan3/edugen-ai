@@ -6,9 +6,16 @@ import {
 } from "react-icons/tb";
 import { useState } from "react";
 import Image from "next/image";
-import { Plus } from "lucide-react";
+import { Plus, LogOut, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import SidebarItem from "@/components/sidebarItem";
+import Link from "next/link";
 
 // interface SidebarProps {
 //   isOpen: boolean;
@@ -17,6 +24,7 @@ import { Button } from "@/components/ui/button";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   return (
     <div className={`flex-1 max-h-screen w-fit flex flex-col`}>
@@ -33,7 +41,7 @@ const Sidebar = () => {
         <div className="flex  flex-col justify-between h-full gap-y-4">
           <div className={`flex items-center ${isOpen && "justify-between"}`}>
             <div
-              className={`flex items-end gap-x-1 transition-all pointer-events-none ${
+              className={`flex items-end gap-x-1 transition-all pointer-events-none  ${
                 !isOpen ? "w-0 opacity-0" : "w-full opacity-100"
               } `}
             >
@@ -67,30 +75,52 @@ const Sidebar = () => {
               !isOpen ? "w-0 opacity-0" : "w-full opacity-100"
             }  h-full pt-10 flex flex-col overflow-y-auto`}
           >
-            disini adalah history dari
+            <SidebarItem label="ujian ipa pernafasan" />
           </div>
-          <div
-            className={`${
-              !isOpen ? "w-0 opacity-0" : "w-full opacity-100"
-            } flex flex-col gap-y-4`}
-          >
-            <Button
-              size={"sm"}
-              className="bg-primary text-primary-foreground w-fit rounded-md self-center"
-            >
-              <Plus className="w-4 h-4" />
-              New Exam
-            </Button>
-            <div className="h-fit px-2 py-1 flex items-center space-x-2 hover:bg-primary/20 rounded-sm ">
-              <Image
-                alt="profile"
-                src={"/google-icon.svg"}
-                width={36}
-                height={36}
-                className="rounded-full border-1 "
-              />
-              <p className="text-xs sm:text-sm">User Name</p>
-            </div>
+          <div className={`w-full flex flex-col gap-y-4`}>
+            <Link href={"/e"}>
+              <Button
+                size={"sm"}
+                className="bg-primary text-primary-foreground w-fit rounded-full self-center"
+              >
+                <Plus className="w-4 h-4" />
+                {isOpen && <p>New exams</p>}
+              </Button>
+            </Link>
+            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+              <PopoverTrigger
+                asChild
+                onClick={(prev) => {
+                  setPopoverOpen(!prev);
+                }}
+              >
+                <div className="cursor-pointer h-fit px-2 py-1 flex items-center space-x-2 hover:bg-primary/20 rounded-full ">
+                  <Image
+                    alt="profile"
+                    src={"/google-icon.svg"}
+                    width={36}
+                    height={36}
+                    className="rounded-full border-1 "
+                  />
+                  <p className={`text-xs sm:text-sm ${!isOpen && "hidden"}`}>
+                    User Name
+                  </p>
+                </div>
+              </PopoverTrigger>
+              <PopoverContent
+                align="start"
+                className=" mb-2 rounded-sm w-fit bg-primary text-primary-foreground"
+              >
+                <div className="flex flex-col p-2">
+                  <p className="w-full p-2 flex items-center hover:bg-white/30 rounded-full transition-all cursor-pointer">
+                    <User className="w-4 h-4 mr-2" /> Profie
+                  </p>
+                  <p className="w-full p-2 flex items-center hover:bg-white/30 rounded-full transition-all cursor-pointer">
+                    <LogOut className="w-4 h-4 mr-2" /> Log out
+                  </p>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>

@@ -7,18 +7,20 @@ const PublicLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="w-full max-w-[1440px] mx-auto flex flex-col min-h-screen p-4">
       <nav className="flex justify-between items-center">
-        <div className="flex items-end gap-x-2 w-fit">
-          <Image
-            alt="logo"
-            src={"/eduGen-Logo.png"}
-            width={50}
-            height={50}
-            className=" w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10"
-          />
-          <h1 className="font-bold leading-none text-base  sm:text-lg text-primary text-center">
-            Edugen AI
-          </h1>
-        </div>
+        <Link href={"/"}>
+          <div className="flex items-end gap-x-2 w-fit cursor-pointer">
+            <Image
+              alt="logo"
+              src={"/eduGen-Logo.png"}
+              width={50}
+              height={50}
+              className=" w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10"
+            />
+            <h1 className="font-bold leading-none text-base  sm:text-lg text-primary text-center">
+              Edugen AI
+            </h1>
+          </div>
+        </Link>
         <div className="w-fit flex gap-x-2 md:gap-x-4 items-center font-light text-xs sm:text-sm md:text-base ">
           <Link href={"/news"} className="text-accent-foreground">
             News

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import CustomFormField, {
   FormFieldType,
 } from "@/components/form/customFormField";
+import { signIn } from "@/actions/signIn.action";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -85,25 +86,28 @@ const SignInPage = () => {
             >
               Sign In
             </Button>
-            <div className="flex items-center">
-              <hr className="flex-grow border-t border-primary" />
-              <span className="px-2 text-sm text-primary">OR</span>
-              <hr className="flex-grow border-t border-primary" />
-            </div>
-            <Button
-              variant="outline"
-              className="w-full border-primary text-primary flex items-center hover:text-primary-foreground"
-            >
-              <Image
-                alt="google-icon"
-                src={"/google-icon.svg"}
-                width={20}
-                height={20}
-              />{" "}
-              Sign in with Google
-            </Button>
           </form>
         </Form>
+        <div className="flex items-center w-full">
+          <hr className="flex-grow border-t border-primary" />
+          <span className="px-2 text-sm text-primary">OR</span>
+          <hr className="flex-grow border-t border-primary" />
+        </div>
+        <Button
+          variant="outline"
+          onClick={async () => {
+            await signIn();
+          }}
+          className="w-full border-primary text-primary flex items-center hover:text-primary-foreground"
+        >
+          <Image
+            alt="google-icon"
+            src={"/google-icon.svg"}
+            width={20}
+            height={20}
+          />{" "}
+          Sign in with Google
+        </Button>
       </div>
     </div>
   );

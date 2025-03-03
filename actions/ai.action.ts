@@ -15,13 +15,13 @@ const openai = new OpenAi({
 });
 
 const inputParameters = {
-  topic: ["world war 2"],
-  field: "history",
-  difficultyMin: "C2",
-  difficultyMax: "C6",
-  questionCount: 10,
-  gradeLevel: "Grade 8",
-  language: "English",
+  topic: "Sistem Pernafasan",
+  field: "Biologi",
+  lowestDifficullity: "C2",
+  highestDIfficullity: "C6",
+  numberOfQuestion: 1,
+  studentGrade: "11 grades",
+  language: "Indonesia",
   questionType: "Multiple Choice",
 };
 
@@ -31,53 +31,52 @@ export const getOutput = async () => {
     messages: [
       {
         role: "system",
-        content: `You are an automatic question generator for the field of ${
-          inputParameters.field
-        }.
-Generate ${inputParameters.questionCount} ${
-          inputParameters.questionType
-        } questions 
-on the topics of ${inputParameters.topic.join(", ")}.
-The questions should be suitable for ${inputParameters.gradeLevel} students 
-and written in ${inputParameters.language}.
-Ensure the questions vary in difficulty from ${
-          inputParameters.difficultyMin
-        } to ${inputParameters.difficultyMax}.
+        content: `
+          You are a highly skilled teacher assistant AI specializing in generating high-quality exam questions, following educational best practices and Bloom's Taxonomy.
+          Bloom's Taxonomy consists of six cognitive levels:
+          - C1 (Remembering): Recall of facts and basic concepts (e.g., define, list, memorize).
+          - C2 (Understanding): Explain ideas or concepts (e.g., summarize, describe, interpret).
+          - C3 (Applying): Use information in new situations (e.g., implement, execute, solve).
+          - C4 (Analyzing): Draw connections among ideas (e.g., differentiate, organize, compare).
+          - C5 (Evaluating): Justify a decision or course of action (e.g., assess, argue, critique).
+          - C6 (Creating): Produce new or original work (e.g., design, construct, develop).
+          When generating questions, ensure they align with the specified difficulty levels and include appropriate verbs and complexity as outlined in Bloom's Taxonomy.
+          make sure Return the result as a valid JSON string with an array of objects no matter how much the object, where each object includes the fields: "question", "options" (if applicable and must have for "multiple choice" type, if there is no option return ['No Option']), "difficulty", "answer", and "explanation". 
+        The JSON string should not contain line breaks or unnecessary whitespace formatting.
+        Ensure the output is always a direct array of objects, not wrapped in another object like {'questions': [...]}.
+        `,
+      },
+      {
+        role: "user",
+        content: `Generate ${inputParameters.numberOfQuestion} ${inputParameters.questionType} questions for the topic "${inputParameters.topic}" in the field of ${inputParameters.field}. 
+        The questions should be suitable for ${inputParameters.studentGrade} grade level, written in ${inputParameters.language}, and cover Bloom's Taxonomy difficulty levels ranging from ${inputParameters.lowestDifficullity} to ${inputParameters.highestDIfficullity}. 
+        Focus on creating questions that promote critical thinking, problem-solving, and real-world application. Where applicable, include context or scenarios to make the questions more engaging and challenging. 
+      
+        For "multiple choice" questions:
+        - Provide exactly 4 answer options for elementary (1-6 grades) and junior high school (7-9 grades) levels .
+        - Provide exactly 5 answer options for senior high school (10-12 grades) level.
+        - Ensure no empty options and include only one correct answer per question.
+        - Options should be well-constructed and avoid overly obvious or misleading choices.
+        - Answer should be '0' if A, '1' if B, '2' if C, '3' if D, and '4' if E.
+      
+        When question is not multiple choise, give answer as list of text not string number:
+          - True or False : 'Benar'
+          - Essay : 'here is answer of question'
+          - Sort Answer : 'here is answer of question' note:for Short answer question answer must be less then 50 character
 
-Provide the output as a **JSON array of objects**, following this strict format:
-[
-  {
-    "question": "The question text",
-    "difficulty": "C2",
-    "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-    "answer": "The correct answer",
-    "explanation": "A detailed explanation of the answer"
-  }
-]
-
-Important Formatting Rules:
-1. Ensure all strings are enclosed in **double quotes ("")**, not single quotes ('').
-2. Escape any special characters properly (e.g., \\", \\n, \\\\).
-3. Avoid trailing commas and ensure proper array and object closures ([] and {}).
-4. Double-check that the output is a **valid JSON** and can be safely parsed without errors.
-5. The entire output should fit **within a single array** to avoid issues when parsed.
-
-The output must be a valid JSON array that can be safely parsed with JSON.parse().`,
+        Return the result as a valid JSON string with an array of objects no matter how much the object, where each object includes the fields: "question", "options" (if applicable and must have for "multiple choice" type, if there is no option return ['No Option']), "difficulty", "answer", and "explanation". 
+        The JSON string should not contain line breaks or unnecessary whitespace formatting.`,
       },
     ],
   });
 
-  console.log({ completion });
   const hasil = completion.choices[0].message.content;
-  console.log(hasil);
-  const match = hasil?.match(/\[(.*)\]/s);
+
   try {
-    if (match) {
-      const data = JSON.parse(match[1]);
-      console.log("JSON Valid:", data);
-    }
-    return date;
+    const jsonObject = JSON.parse(hasil!);
+    console.log({ hasil, jsonObject });
+    return jsonObject;
   } catch (error) {
-    console.error("JSON Parsing Error:", error);
+    console.error("Invalid JSON string!", error);
   }
 };
