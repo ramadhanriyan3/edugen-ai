@@ -4,7 +4,8 @@ import {
   TbLayoutSidebarLeftExpand,
   TbLayoutSidebarLeftCollapse,
 } from "react-icons/tb";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { Plus, LogOut, User } from "lucide-react";
 
@@ -14,15 +15,16 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import SidebarItem from "@/components/sidebarItem";
-import Link from "next/link";
+import { signOut } from "next-auth/react";
 
-// interface SidebarProps {
-//   isOpen: boolean;
-//   setIsOpen: Dispatch<SetStateAction<boolean>>;
-// }
+interface SidebarProps {
+  children: ReactNode;
+  userImg: string;
+  username: string;
+  userId: string;
+}
 
-const Sidebar = () => {
+const Sidebar = ({ children, userImg, username }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [popoverOpen, setPopoverOpen] = useState(false);
 
@@ -53,7 +55,7 @@ const Sidebar = () => {
                 className={`w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10`}
               />
               <h1
-                className={`font-bold leading-none text-sm w-full sm:text-lg text-primary text-start`}
+                className={`font-bold leading-none text-sm w-full sm:text-lg text-primary text-start whitespace-nowrap `}
               >
                 Edugen AI
               </h1>
@@ -70,21 +72,30 @@ const Sidebar = () => {
               />
             )}
           </div>
+          <hr className="w-full" />
           <div
             className={` ${
               !isOpen ? "w-0 opacity-0" : "w-full opacity-100"
-            }  h-full pt-10 flex flex-col overflow-y-auto`}
+            }  h-full pt-10 flex flex-col overflow-y-auto overflow-x-hidden`}
           >
-            <SidebarItem label="ujian ipa pernafasan" />
+            {children}
           </div>
           <div className={`w-full flex flex-col gap-y-4`}>
-            <Link href={"/e"}>
+            <Link href={"/e"} className="self-center">
               <Button
                 size={"sm"}
-                className="bg-primary text-primary-foreground w-fit rounded-full self-center"
+                className="bg-primary gap-0 text-primary-foreground w-fit rounded-full justify-start"
               >
-                <Plus className="w-4 h-4" />
-                {isOpen && <p>New exams</p>}
+                <Plus className=" w-4 h-4" />
+                {
+                  <p
+                    className={` transition-all delay-75 ${
+                      !isOpen ? "opacity-0 w-0 pl-0" : "pl-2 w-20 opacity-100"
+                    } `}
+                  >
+                    New exams
+                  </p>
+                }
               </Button>
             </Link>
             <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
@@ -94,16 +105,20 @@ const Sidebar = () => {
                   setPopoverOpen(!prev);
                 }}
               >
-                <div className="cursor-pointer h-fit px-2 py-1 flex items-center space-x-2 hover:bg-primary/20 rounded-full ">
+                <div className="cursor-pointer h-fit p-1 flex items-center space-x-2 hover:bg-primary/20 rounded-full ">
                   <Image
                     alt="profile"
-                    src={"/google-icon.svg"}
+                    src={userImg ? `${userImg}` : "/user.png"}
                     width={36}
                     height={36}
                     className="rounded-full border-1 "
                   />
-                  <p className={`text-xs sm:text-sm ${!isOpen && "hidden"}`}>
-                    User Name
+                  <p
+                    className={`text-xs sm:text-sm whitespace-nowrap  transition-all ${
+                      !isOpen ? "opacity-0 w-0" : "opacity-100 w-full"
+                    } `}
+                  >
+                    {username}
                   </p>
                 </div>
               </PopoverTrigger>
@@ -112,10 +127,16 @@ const Sidebar = () => {
                 className=" mb-2 rounded-sm w-fit bg-primary text-primary-foreground"
               >
                 <div className="flex flex-col p-2">
-                  <p className="w-full p-2 flex items-center hover:bg-white/30 rounded-full transition-all cursor-pointer">
+                  <div
+                    onClick={() => (window.location.hash = "#profile")}
+                    className="w-full p-2 flex items-center hover:bg-white/30 rounded-full transition-all cursor-pointer"
+                  >
                     <User className="w-4 h-4 mr-2" /> Profie
-                  </p>
-                  <p className="w-full p-2 flex items-center hover:bg-white/30 rounded-full transition-all cursor-pointer">
+                  </div>
+                  <p
+                    onClick={() => signOut()}
+                    className="w-full p-2 flex items-center hover:bg-white/30 rounded-full transition-all cursor-pointer"
+                  >
                     <LogOut className="w-4 h-4 mr-2" /> Log out
                   </p>
                 </div>

@@ -70,8 +70,8 @@ interface CustomPropsField {
     studentGrade: string;
     topic: string;
     questionType: string;
-    lowestDifficullity: string;
-    highestDifficullity: string;
+    lowestDifficulty: string;
+    highestDifficulty: string;
     numberOfQuestion: string;
     questionLanguage: string;
   }>;
@@ -153,7 +153,7 @@ const RenderField = ({
             name={name}
           >
             <FormControl>
-              <SelectTrigger className="border-0 text-xs sm:text-sm">
+              <SelectTrigger className="border-0 text-xs sm:text-sm ">
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>
@@ -184,15 +184,17 @@ const RenderField = ({
                   variant="ghost"
                   role="combobox"
                   className={cn(
-                    "w-full justify-between hover:bg-transparent text-xs sm:text-sm",
+                    "w-full pr-2 flex items-center overflow-hidden justify-between hover:bg-transparent text-xs sm:text-sm",
                     !field.value && "text-muted-foreground"
                   )}
                 >
-                  {field.value
-                    ? selectOptions!.find(
-                        (option) => option.value === field.value
-                      )?.label
-                    : "Select field"}
+                  <p className="w-[85%] overflow-hidden text-start">
+                    {field.value
+                      ? selectOptions!.find(
+                          (option) => option.value === field.value
+                        )?.label
+                      : "Select field"}
+                  </p>
                   <ChevronsUpDown className="opacity-50" />
                 </Button>
               </FormControl>
@@ -214,7 +216,6 @@ const RenderField = ({
                         value={option.value}
                         key={option.value}
                         onSelect={() => {
-                          console.log(field.value);
                           setValue!("field", option.value);
                           setIsOpen(false);
                         }}
@@ -248,8 +249,10 @@ const CustomFormField = (props: CustomPropsField) => {
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex-1 ">
-          <FormLabel className="text-xs sm:text-sm">{label}</FormLabel>
+        <FormItem className="flex-1 min-w-20 ">
+          <FormLabel className="text-xs sm:text-sm w-[100px]">
+            {label}
+          </FormLabel>
           <RenderField field={field} props={props} />
           <FormMessage />
         </FormItem>

@@ -4,7 +4,6 @@ import Image from "next/image";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-// import { useRouter } from "next/navigation";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -12,36 +11,35 @@ import CustomFormField, {
   FormFieldType,
 } from "@/components/form/customFormField";
 import { signIn } from "@/actions/signIn.action";
+import FadeInWrapper from "@/components/fadeInWrapper";
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z
-    .string()
-    .min(8, {
-      message: "Pasword must be at least 6 characters.",
-    })
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number"),
 });
 
 const SignInPage = () => {
-  // const router = useRouter();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log({ values });
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const formData = new FormData();
+    Object.entries(values).forEach(([key, value]) =>
+      formData.append(key, value)
+    );
+    await signIn("nodemailer", formData, "/e");
   };
 
   return (
-    <div className="flex-1 bg-transparent items-center justify-center flex">
+    <div className="flex-1 bg-transparent items-center justify-center flex flex-col gap-10">
+      <FadeInWrapper variant="top">
+        <h1 className="text-2xl font-bold text-primary text-center max-w-[400px] drop-shadow-sm shadow-white">
+          Empower Your Teaching Journey with Edugen AI
+        </h1>
+      </FadeInWrapper>
       <div
         className="flex flex-col gap-y-4 w-full max-w-md min-w-72 min-h-72
      bg-white/70
@@ -64,20 +62,12 @@ const SignInPage = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="w-full flex flex-col gap-y-4"
           >
-            {/* put form field */}
             <CustomFormField
               control={form.control}
               name="email"
               label="Email"
               placeholder="example@gmail.com"
               fieldType={FormFieldType.Input}
-            />
-            <CustomFormField
-              fieldType={FormFieldType.Password}
-              control={form.control}
-              name="password"
-              label="Password"
-              placeholder="Enter your password"
             />
 
             <Button
@@ -96,7 +86,7 @@ const SignInPage = () => {
         <Button
           variant="outline"
           onClick={async () => {
-            await signIn();
+            await signIn("google", undefined, "/e");
           }}
           className="w-full border-primary text-primary flex items-center hover:text-primary-foreground"
         >

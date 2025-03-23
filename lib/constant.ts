@@ -15,7 +15,7 @@ export const fieldOptions = [
   { id: "F14", label: "Physical Education", value: "physical_education" },
 ];
 
-export const difficullity = [
+export const difficulty = [
   { id: "DTB1", label: "C2 - Understanding", value: "C2" },
   { id: "DTB2", label: "C3 - Applying", value: "C3" },
   { id: "DTB3", label: "C4 - Analyzing", value: "C4" },

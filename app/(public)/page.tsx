@@ -1,14 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// import { getOutput } from "@/actions/ai.action";
 import FadeInWrapper from "@/components/fadeInWrapper";
 import { Button } from "@/components/ui/button";
+import { auth } from "@/auth";
 
 export default async function Home() {
-  // const hasil = await getOutput();
-
-  // console.log({ hasil });
+  const session = await auth();
 
   return (
     <div className="w-full flex flex-col gap-y-5 md:gap-y-10 justify-center items-center px-5">
@@ -39,7 +37,7 @@ export default async function Home() {
         </p>
       </div>
       <div className="w-fit flex gap-x-4">
-        <Link href={"/sign-in"}>
+        <Link href={session ? "/e" : "/sign-in"}>
           <Button className="bg-primary text-primary-foreground text-[10px] md:text-sm">
             Generate Exams
           </Button>

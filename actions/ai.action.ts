@@ -1,7 +1,6 @@
 "use server";
 
 import OpenAi from "openai";
-import { date } from "zod";
 
 const AI_KEY = process.env.OPENROUTER_API_KEY;
 
@@ -14,18 +13,27 @@ const openai = new OpenAi({
   },
 });
 
-const inputParameters = {
-  topic: "Sistem Pernafasan",
-  field: "Biologi",
-  lowestDifficullity: "C2",
-  highestDIfficullity: "C6",
-  numberOfQuestion: 1,
-  studentGrade: "11 grades",
-  language: "Indonesia",
-  questionType: "Multiple Choice",
-};
+interface inputType {
+  topic: string;
+  field: string;
+  lowestDifficulty: string;
+  highestDifficulty: string;
+  numberOfQuestion: string;
+  studentGrade: string;
+  questionLanguage: string;
+  questionType: string;
+}
 
-export const getOutput = async () => {
+export const getOutput = async ({
+  topic,
+  field,
+  lowestDifficulty,
+  highestDifficulty,
+  numberOfQuestion,
+  studentGrade,
+  questionLanguage,
+  questionType,
+}: inputType) => {
   const completion = await openai.chat.completions.create({
     model: "meta-llama/llama-3.3-70b-instruct:free",
     messages: [
@@ -48,8 +56,8 @@ export const getOutput = async () => {
       },
       {
         role: "user",
-        content: `Generate ${inputParameters.numberOfQuestion} ${inputParameters.questionType} questions for the topic "${inputParameters.topic}" in the field of ${inputParameters.field}. 
-        The questions should be suitable for ${inputParameters.studentGrade} grade level, written in ${inputParameters.language}, and cover Bloom's Taxonomy difficulty levels ranging from ${inputParameters.lowestDifficullity} to ${inputParameters.highestDIfficullity}. 
+        content: `Generate ${numberOfQuestion} ${questionType} questions for the topic "${topic}" in the field of ${field}. 
+        The questions should be suitable for ${studentGrade} grade level, written in ${questionLanguage}, and cover Bloom's Taxonomy difficulty levels ranging from ${lowestDifficulty} to ${highestDifficulty}. 
         Focus on creating questions that promote critical thinking, problem-solving, and real-world application. Where applicable, include context or scenarios to make the questions more engaging and challenging. 
       
         For "multiple choice" questions:
@@ -74,7 +82,6 @@ export const getOutput = async () => {
 
   try {
     const jsonObject = JSON.parse(hasil!);
-    console.log({ hasil, jsonObject });
     return jsonObject;
   } catch (error) {
     console.error("Invalid JSON string!", error);
