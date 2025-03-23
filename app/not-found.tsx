@@ -23,7 +23,7 @@ const NotFound = () => {
       </h1>
       <Link href={"/"}>
         <Button className="text-xs sm:text-sm md:text-base">
-          Back to the class
+          Back to the desk
         </Button>
       </Link>
     </div>

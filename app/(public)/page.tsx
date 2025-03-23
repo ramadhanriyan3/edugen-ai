@@ -1,14 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// import { getOutput } from "@/actions/ai.action";
 import FadeInWrapper from "@/components/fadeInWrapper";
 import { Button } from "@/components/ui/button";
+import { auth } from "@/auth";
 
 export default async function Home() {
-  // const hasil = await getOutput(
-  //   "buatkan saya 2 soal pilihan ganda seni budaya dengan taksonomi bloom c5"
-  // );
+  const session = await auth();
 
   return (
     <div className="w-full flex flex-col gap-y-5 md:gap-y-10 justify-center items-center px-5">
@@ -28,19 +26,18 @@ export default async function Home() {
       </FadeInWrapper>
       <div className="w-fit max-w-4xl flex items-center flex-col gap-x-2">
         <h1 className="text-center w-fit font-bold text-accent-foreground text-md md:text-2xl lg:text-4xl flex gap-x-1">
-          Generate Exams in Minutes, Not Hours.
+          Create Exams in Minutes, Not Hours.
         </h1>
         <p className="text-xs font-light sm:text-sm md:text-md text-accent-foreground/40 text-center">
           AI-Powered Exam Generator for Smarter Education
         </p>
         <p className="pt-4 md:pt-6 font-semibold text-xs md:text-xl text-accent-foreground text-center">
           Create Customized, Bloom’s Taxonomy-Aligned Exams Instantly – Easy,
-          Free, and Perfect for Teachers, Universities, and Training
-          Institutions.
+          Free, and Perfect for Teachers and Training Institutions.
         </p>
       </div>
       <div className="w-fit flex gap-x-4">
-        <Link href={"/log-in"}>
+        <Link href={session ? "/e" : "/sign-in"}>
           <Button className="bg-primary text-primary-foreground text-[10px] md:text-sm">
             Generate Exams
           </Button>

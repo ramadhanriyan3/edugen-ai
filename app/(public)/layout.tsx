@@ -2,23 +2,28 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { LuInstagram, LuFacebook, LuTwitter, LuMail } from "react-icons/lu";
+import { auth } from "@/auth";
 
-const PublicLayout = ({ children }: { children: ReactNode }) => {
+const PublicLayout = async ({ children }: { children: ReactNode }) => {
+  const session = await auth();
+
   return (
-    <div className="w-full flex flex-col min-h-screen p-4">
+    <div className="w-full max-w-[1440px] mx-auto flex flex-col min-h-screen p-4">
       <nav className="flex justify-between items-center">
-        <div className="flex items-end gap-x-2 w-fit">
-          <Image
-            alt="logo"
-            src={"/eduGen-Logo.png"}
-            width={50}
-            height={50}
-            className=" w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10"
-          />
-          <h1 className="font-bold leading-none text-base  sm:text-lg text-primary text-center">
-            Edugen AI
-          </h1>
-        </div>
+        <Link href={"/"}>
+          <div className="flex items-end gap-x-2 w-fit cursor-pointer">
+            <Image
+              alt="logo"
+              src={"/eduGen-Logo.png"}
+              width={50}
+              height={50}
+              className=" w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10"
+            />
+            <h1 className="font-bold leading-none text-base  sm:text-lg text-primary text-center">
+              Edugen AI
+            </h1>
+          </div>
+        </Link>
         <div className="w-fit flex gap-x-2 md:gap-x-4 items-center font-light text-xs sm:text-sm md:text-base ">
           <Link href={"/news"} className="text-accent-foreground">
             News
@@ -29,12 +34,14 @@ const PublicLayout = ({ children }: { children: ReactNode }) => {
           <Link href={"/suport"} className="text-accent-foreground">
             Support
           </Link>
-          <Link
-            href={"/log-in"}
-            className=" font-semibold border border-primary text-primary py-1 px-2 rounded-sm"
-          >
-            Log in
-          </Link>
+          {!session && (
+            <Link
+              href={"/sign-in"}
+              className=" font-semibold border border-primary text-primary py-1 px-2 rounded-sm"
+            >
+              Sign in
+            </Link>
+          )}
         </div>
       </nav>
       <div className="flex-1 bg-transparent items-center justify-center flex">
