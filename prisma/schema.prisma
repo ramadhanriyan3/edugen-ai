@@ -86,3 +86,11 @@ model Question {
 
   exam Exam @relation(fields: [examId], references: [id], onDelete:Cascade)
 }
+
+model news {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  content String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
