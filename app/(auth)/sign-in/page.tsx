@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import CustomFormField, {
   FormFieldType,
 } from "@/components/form/customFormField";
-import { signIn } from "@/actions/signIn.action";
+import { signIn } from "@/app/actions/signIn.action";
 import FadeInWrapper from "@/components/fadeInWrapper";
 
 const formSchema = z.object({
