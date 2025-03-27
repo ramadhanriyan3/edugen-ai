@@ -1,4 +1,4 @@
-import { getExamById } from "@/actions/exam.action";
+import { getExamById } from "@/app/actions/exam.action";
 import ChatRoom from "@/components/chatRoom";
 import { redirect } from "next/navigation";
 

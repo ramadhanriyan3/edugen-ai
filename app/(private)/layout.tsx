@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 import SidebarItem from "@/components/sidebarItem";
-import { getExams } from "@/actions/exam.action";
+import { getExams } from "@/app/actions/exam.action";
 import ProfileModal from "@/components/profileModal";
 
 const PrivateLayout = async ({ children }: { children: ReactNode }) => {
