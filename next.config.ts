@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    serverActions: {
+      allowedOrigins: ["*.vercel.app"],
+    },
+  },
 };
 
 export default nextConfig;
