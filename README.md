@@ -12,7 +12,8 @@ _AI-powered exam generation using Meta Llama-3.3-70B model_
 ## 🚀 Live Demo
 
 Experience EduGen now:  
-👉 [Demo Link](https://edugen-ryn.vercel.app/) 👈
+
+👉 [Demo Link](https://edugen-ryn.vercel.app/)
 
 ## 🛠️ Tech Stack
 
