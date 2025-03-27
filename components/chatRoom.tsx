@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getExamById } from "@/actions/exam.action";
+import { getExamById } from "@/app/actions/exam.action";
 import Loading from "@/components/loading";
 import { useExamFormStore } from "@/lib/store/generatorFormStore";
 
