@@ -13,9 +13,9 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { deleteAccount, getUserById } from "@/app/actions/user.action";
-import ConfirmActionContent from "./confirmActionContent";
-import { deleteExams } from "@/app/actions/exam.action";
+import { deleteAccount, getUserById } from "@/actions/user.action";
+import ConfirmActionContent from "@/components/confirmActionContent";
+import { deleteExams } from "@/actions/exam.action";
 import { signOut } from "next-auth/react";
 
 type UserType = {
