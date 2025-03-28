@@ -11,7 +11,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { deleteExamById } from "@/app/actions/exam.action";
+import { deleteExamById } from "@/actions/exam.action";
 
 const SidebarItem = ({ label, examId }: { label: string; examId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +55,10 @@ const SidebarItem = ({ label, examId }: { label: string; examId: string }) => {
             onClick={async () => {
               await deleteExamById(examId);
               setIsOpen(false);
-              router.push("/e");
+              if (isSelected) {
+                router.push("/e");
+              }
+              router.refresh();
             }}
           >
             <Trash2 className="w-4 h-4 mr-2" /> Delete
