@@ -21,9 +21,9 @@ import {
 } from "@/lib/constant";
 import { Dispatch, SetStateAction, useState } from "react";
 import { getQuestionMarkdown } from "@/lib/getQuestionsNode";
-import { getOutput } from "@/app/actions/ai.action";
-import { createExam } from "@/app/actions/exam.action";
-import { createQuestion } from "@/app/actions/question.action";
+import { getOutput } from "@/actions/ai.action";
+import { createExam } from "@/actions/exam.action";
+import { createQuestion } from "@/actions/question.action";
 import { useExamFormStore } from "@/lib/store/generatorFormStore";
 import {
   AlertDialogTitle,
