@@ -68,9 +68,11 @@ const ProfileModal = ({ userId }: { userId: string }) => {
 
   return (
     <AlertDialog open={isOpen}>
-      <AlertDialogContent className="sm:max-w-[600px] bg-primary-foreground">
+      <AlertDialogContent className="sm:max-w-[520px] w-10/12 bg-primary-foreground mx-4">
         <AlertDialogHeader className="flex flex-row items-center justify-between">
-          <AlertDialogTitle>Profile</AlertDialogTitle>
+          <AlertDialogTitle className=" text-sm sm:text-base">
+            Profile
+          </AlertDialogTitle>
           <div
             onClick={() => {
               router.push(pathname);
@@ -81,17 +83,17 @@ const ProfileModal = ({ userId }: { userId: string }) => {
             <X className="w-4 h-4" />
           </div>
         </AlertDialogHeader>
-        <div className="w-full flex gap-x-4">
+        <div className="w-full flex flex-col md:flex-row gap-4 items-center md:items-start">
           <Image
             src={userData?.image || "/user.png"}
             alt="photo-profile"
             width={80}
             height={80}
-            className="rounded-full border h-fit"
+            className="rounded-full border w-16 h-16"
           />
-          <div className="flex flex-col gap-y-4 w-full py-2">
+          <div className="flex flex-col gap-y-4 w-full py-2 text-xs sm:text-sm">
             <div className="flex items-center justify-between text-primary">
-              <p className=" pb-1">Username</p>
+              <p className="pb-1">Username</p>
               <p className="px-4 ">{userData?.name}</p>
             </div>
             <hr />

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   AlertDialogContent,
-  AlertDialogFooter,
+  AlertDialogDescription,
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
@@ -22,17 +22,19 @@ const ConfirmActionContent = ({
 }: ConfirmActionProps) => {
   return (
     <>
-      <AlertDialogContent className="sm:max-w-8/12 bg-primary-foreground">
+      <AlertDialogContent className="w-10/12 bg-primary-foreground ">
         <AlertDialogHeader className="flex flex-row items-center justify-between">
-          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogTitle className="text-sm sm:text-base">
+            {title}
+          </AlertDialogTitle>
         </AlertDialogHeader>
-        <p>{content}</p>
-        <AlertDialogFooter>
+        <p className="text-xs sm:text-sm">{content}</p>
+        <div className="flex w-full gap-x-2 items-center justify-end">
           <Button
             type="button"
             onClick={handleClose}
             variant={"outline"}
-            className="w-fit flex items-center gap-x-2 text-primary hover:text-primary hover:bg-primary/20 border-primary"
+            className="w-fit text-xs sm:text-sm flex items-center gap-x-2 text-primary hover:text-primary hover:bg-primary/20 border-primary"
           >
             Cancel
           </Button>
@@ -40,12 +42,13 @@ const ConfirmActionContent = ({
             onClick={handleAction}
             type="button"
             variant={"destructive"}
-            className="w-fit flex items-center gap-x-2"
+            className="w-fit text-xs sm:text-sm flex items-center gap-x-2"
           >
-            <Trash className="w-4 h-4" />
+            <Trash className="w-3  h-3 sm:w-4 sm:h-4" />
             Delete
           </Button>
-        </AlertDialogFooter>
+        </div>
+        <AlertDialogDescription></AlertDialogDescription>
       </AlertDialogContent>
     </>
   );
