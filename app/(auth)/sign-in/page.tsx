@@ -12,6 +12,7 @@ import CustomFormField, {
 } from "@/components/form/customFormField";
 import { signIn } from "@/actions/signIn.action";
 import FadeInWrapper from "@/components/fadeInWrapper";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -41,11 +42,11 @@ const SignInPage = () => {
         </h1>
       </FadeInWrapper>
       <div
-        className="flex flex-col gap-y-4 w-full max-w-md min-w-72 min-h-72
+        className="flex flex-col gap-y-4 max-w-md w-10/12 min-h-72
      bg-white/70
       shadow-md drop-shadow-lg rounded-lg p-5 items-center mx-4"
       >
-        <div className="flex items-end gap-x-2 w-fit">
+        <Link href={"/"} className="flex items-end gap-x-2 w-fit">
           <Image
             alt="logo"
             src={"/eduGen-Logo.png"}
@@ -56,7 +57,7 @@ const SignInPage = () => {
           <h1 className="font-bold leading-none text-base  sm:text-lg text-primary text-center">
             Edugen AI
           </h1>
-        </div>
+        </Link>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

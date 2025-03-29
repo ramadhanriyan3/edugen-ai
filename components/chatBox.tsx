@@ -40,7 +40,7 @@ const ChatBoxComponent = ({
 
   return (
     <div className="flex flex-col rounded-md p-2 whitespace-pre-wrap">
-      <div ref={markdownRef}>
+      <div ref={markdownRef} className="text-xs sm:text-sm">
         <Markdown>
           {(isTyping ? text : question).replace(/\n\n/g, "  \n")}
         </Markdown>
