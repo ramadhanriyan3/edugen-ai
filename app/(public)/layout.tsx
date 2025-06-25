@@ -28,9 +28,6 @@ const PublicLayout = async ({ children }: { children: ReactNode }) => {
           <Link href={"/news"} className="text-accent-foreground">
             News
           </Link>
-          <Link href={"/tutorial"} className="text-accent-foreground">
-            Tutorial
-          </Link>
           <Link href={"/suport"} className="text-accent-foreground">
             Support
           </Link>
