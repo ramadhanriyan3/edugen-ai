@@ -3,7 +3,6 @@ import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./lib/prisma.db";
 import Nodemailer from "next-auth/providers/nodemailer";
-// import { getUserById } from "./actions/user.action";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -22,4 +21,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   adapter: PrismaAdapter(prisma),
   secret: process.env.AUTH_SECRET,
+  callbacks: {
+    async session({ session, user }) {
+      if (session.user) {
+        session.user.id = user.id;
+      }
+
+      return session;
+    },
+  },
 });

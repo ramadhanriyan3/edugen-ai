@@ -1,43 +1,74 @@
-import { ReactNode } from "react";
+"use client";
+
+import { ReactNode, useEffect, useState } from "react";
+import Image from "next/image";
 
 import Sidebar from "@/components/sidebar";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
-
 import SidebarItem from "@/components/sidebarItem";
-import { getExams } from "@/actions/exam.action";
-import ProfileModal from "@/components/profileModal";
 
-const PrivateLayout = async ({ children }: { children: ReactNode }) => {
-  const session = await auth();
+interface Organization {
+  id: string;
+  name: string;
+  ownerId?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
 
-  if (!session?.user) redirect("/sign-in");
+const PrivateLayout = ({ children }: { children: ReactNode }) => {
+  const [orgs, setOrgs] = useState<Organization[]>([]);
 
-  const examList = await getExams();
+  useEffect(() => {
+    const eventSource = new EventSource("/api/organization");
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        console.log("Dari server:", data);
+        setOrgs(data); // update state
+      } catch {
+        console.log("Message:", event.data);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      console.error("SSE error:", err);
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   return (
-    <div className="w-full h-screen flex">
-      <Sidebar
-        userImg={session.user.image!}
-        username={session.user.name!}
-        userId={session.user.id!}
-      >
-        {examList.map((exam) => (
-          <SidebarItem key={exam.id} examId={exam.id} label={exam.title} />
-        ))}
-      </Sidebar>
-      <div className="w-full flex flex-col min-h-screen justify-center items-center p-4">
-        <div className="flex-1 w-[90%] max-w-[1440px] ms-16 md:m-0 bg-transparent items-start justify-start flex">
-          {children}
+    <main className="w-full">
+      <div className="w-full h-screen flex">
+        <div className="w-full bg-white to-primary drop-shadow-md py-2 px-4 absolute z-40 min-h-16 flex justify-between items-center">
+          <div
+            className={`flex items-end gap-x-1 transition-all pointer-events-none`}
+          >
+            <Image
+              alt="logo"
+              src={"/eduGen-Logo.png"}
+              width={50}
+              height={50}
+              className={`w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10`}
+            />
+            <h1
+              className={`font-bold leading-none text-sm w-full sm:text-lg text-primary text-start whitespace-nowrap `}
+            >
+              Edugen AI
+            </h1>
+          </div>
         </div>
-        <ProfileModal userId={session.user.id!} />
-        <footer className="pb-2 md:pb-4 flex items-end justify-center w-full">
-          <p className="text-[10px] md:text-xs text-accent-foreground">
-            &copy; 2025 Edugen AI. All right reserved.
-          </p>
-        </footer>
+        <Sidebar>
+          {orgs.map((item) => (
+            <SidebarItem key={item.id} orgId={item.id} label={item.name} />
+          ))}
+        </Sidebar>
+        {children}
       </div>
-    </div>
+    </main>
   );
 };
 

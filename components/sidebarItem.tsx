@@ -13,19 +13,25 @@ import {
 } from "@/components/ui/popover";
 import { deleteExamById } from "@/actions/exam.action";
 
-const SidebarItem = ({ label, examId }: { label: string; examId: string }) => {
+const SidebarItem = ({ label, orgId }: { label: string; orgId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname().split("/")[2];
-  const isSelected = pathname === examId;
+  const isSelected = pathname === orgId;
 
   return (
     <div
       className={`relative group w-full transition rounded-md px-2 py-1 cursor-pointer ${
-        isSelected ? "bg-primary text-white" : "bg-white text-primary"
-      } hover:bg-primary/70 hover:text-white flex justify-between items-center`}
+        isSelected ? " bg-primary/70 text-white" : "text-primary bg-white/70"
+      } hover:bg-primary/70 hover:text-white flex justify-between items-center drop-shadow-sm`}
     >
-      <Link href={`/e/${examId}`}>
+      <Link
+        href={`/${orgId}/worksheets`}
+        className="flex gap-x-2 items-center group"
+      >
+        <div className="aspect-square w-12 rounded-md flex items-center justify-center bg-primary text-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.8)]">
+          {label[0]}
+        </div>
         <p className="overflow-hidden text-nowrap w-full ">{label}</p>
       </Link>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -48,17 +54,16 @@ const SidebarItem = ({ label, examId }: { label: string; examId: string }) => {
           className=" w-fit text-primary bg-primary-foreground p-1"
         >
           <p className="w-full p-2 flex items-center hover:bg-black/10 transition-all cursor-pointer rounded-md">
-            <Pencil className="w-4 h-4 mr-2" /> Rename
+            <Pencil className="w-4 h-4 mr-2" /> Edit
           </p>
           <p
             className="w-full p-2 flex text-destructive items-center hover:bg-black/10 transition-all cursor-pointer rounded-md"
             onClick={async () => {
-              await deleteExamById(examId);
+              await deleteExamById(orgId);
               setIsOpen(false);
               if (isSelected) {
-                router.push("/e");
+                router.push("/");
               }
-              router.refresh();
             }}
           >
             <Trash2 className="w-4 h-4 mr-2" /> Delete

@@ -41,3 +41,21 @@ export const getQuestionText = (questions: Question[]): string => {
     )
     .join("");
 };
+
+export const PRESENCE_COLORS = [
+  "#FF5733",
+  "#33FF57",
+  "#3357FF",
+  "#FF33A8",
+  "#FF8C33",
+  "#8C33FF",
+  "#33FFF5",
+  "#F5FF33",
+  "#FF3333",
+  "#33FF8C",
+];
+
+export function getRandomPresenceColor(): string {
+  const randomIndex = Math.floor(Math.random() * PRESENCE_COLORS.length);
+  return PRESENCE_COLORS[randomIndex];
+}

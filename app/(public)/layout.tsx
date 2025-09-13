@@ -14,12 +14,12 @@ const PublicLayout = async ({ children }: { children: ReactNode }) => {
           <div className="flex items-end gap-x-2 w-fit cursor-pointer">
             <Image
               alt="logo"
-              src={"/eduGen-Logo.png"}
+              src={"/eduGen-white.png"}
               width={50}
               height={50}
               className=" w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10"
             />
-            <h1 className="font-bold leading-none text-base  sm:text-lg text-primary text-center">
+            <h1 className="font-bold leading-none text-base  sm:text-lg text-white text-center">
               Edugen AI
             </h1>
           </div>
