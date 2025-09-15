@@ -52,7 +52,6 @@ export function NewWorksheetModal({
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     handleCreate(values.title);
-    alert(values.title);
     setOpen(false);
   };
 

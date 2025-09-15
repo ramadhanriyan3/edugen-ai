@@ -12,6 +12,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { deleteExamById } from "@/actions/exam.action";
+import OrganizationModal from "./organizations/organizationModal";
 
 const SidebarItem = ({ label, orgId }: { label: string; orgId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,9 +54,11 @@ const SidebarItem = ({ label, orgId }: { label: string; orgId: string }) => {
           align="end"
           className=" w-fit text-primary bg-primary-foreground p-1"
         >
-          <p className="w-full p-2 flex items-center hover:bg-black/10 transition-all cursor-pointer rounded-md">
-            <Pencil className="w-4 h-4 mr-2" /> Edit
-          </p>
+          <OrganizationModal>
+            <p className="w-full p-2 flex items-center hover:bg-black/10 transition-all cursor-pointer rounded-md">
+              <Pencil className="w-4 h-4 mr-2" /> Edit
+            </p>
+          </OrganizationModal>
           <p
             className="w-full p-2 flex text-destructive items-center hover:bg-black/10 transition-all cursor-pointer rounded-md"
             onClick={async () => {

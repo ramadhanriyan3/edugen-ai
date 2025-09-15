@@ -24,7 +24,7 @@ const NewWorksheetButton = ({ orgId }: NewButtonProps) => {
       .then((res) => {
         const id = res.data.id;
         toast.success("Documnent created");
-        router.push(`/board/${id}`);
+        router.push(`/${orgId}/worksheets/${id}`);
       })
       .catch(() => {
         toast.error("Failed to create document");

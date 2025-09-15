@@ -27,13 +27,10 @@ const WorksheetCard = ({
   authorId,
   authorName,
   createdAt,
-  imageUrl,
   orgId,
 }: WorksheetCardProps) => {
   const { data: session } = useSession();
   const userId = session?.user!.id;
-
-  console.log("GOBLOOOKKKK", { session, userId });
 
   const authorLabel = userId === authorId ? "You" : authorName;
   const createdAtLabel = formatDistanceToNow(createdAt, { addSuffix: true });

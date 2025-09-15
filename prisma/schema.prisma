@@ -27,6 +27,8 @@ model User {
   orgInvitation OrgInvitation[]
 
   Worksheet Worksheet[]
+
+  OrganizationMember OrganizationMember[]
 }
  
 model Account {
@@ -127,27 +129,27 @@ model OrganizationMember {
   userId String @db.ObjectId
   orgId String @db.ObjectId
   role MemberRole
+  user User @relation(fields: [userId], references: [id])
   organizaition Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
   @@unique([userId, orgId])
 }
 
 enum InvitationStatus {
-  pendig
-  expired
+  pending
   accepted
-  rejected
 }
 
 model OrgInvitation {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   ownerId String? @db.ObjectId
+  invitedId String? @db.ObjectId
   orgId String @db.ObjectId
   status InvitationStatus
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
-  owners User? @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner User? @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }
 
 model Worksheet {

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { cookies } from "next/headers";
 
 import NewWorksheetButton from "@/components/newWorksheetButton";
 import WorksheetCard from "@/components/worksheetCard";
@@ -11,12 +12,18 @@ const WorksheetsPage = async ({
 }) => {
   const orgId = (await params).orgId;
 
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+
   async function getData() {
     try {
       const response = await axios.get(
         `http://localhost:3000/api/sheet?orgId=${orgId}`,
         {
           withCredentials: true,
+          headers: {
+            Cookie: cookieHeader,
+          },
         }
       );
       const data = response.data;

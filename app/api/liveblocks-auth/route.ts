@@ -11,13 +11,11 @@ const liveblocks = new Liveblocks({
   secret: API_KEY!,
 });
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { orgId: string; worksheetId: string } }
-) {
+export async function POST(request: NextRequest) {
   const authSession = await auth();
   const user = authSession?.user;
-  const orgId = params.orgId;
+  const { searchParams } = new URL(request.url);
+  const orgId = searchParams.get("orgId");
 
   if (!user) {
     return new NextResponse("Unauthorized", { status: 401 });

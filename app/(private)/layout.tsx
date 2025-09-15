@@ -5,6 +5,7 @@ import Image from "next/image";
 
 import Sidebar from "@/components/sidebar";
 import SidebarItem from "@/components/sidebarItem";
+import { useParams } from "next/navigation";
 
 interface Organization {
   id: string;
@@ -17,6 +18,9 @@ interface Organization {
 const PrivateLayout = ({ children }: { children: ReactNode }) => {
   const [orgs, setOrgs] = useState<Organization[]>([]);
 
+  const params = useParams<{ orgId: string; worksheetId: string }>();
+  const { worksheetId } = params;
+
   useEffect(() => {
     const eventSource = new EventSource("/api/organization");
 
@@ -24,7 +28,7 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
       try {
         const data = JSON.parse(event.data);
         console.log("Dari server:", data);
-        setOrgs(data); // update state
+        setOrgs(data);
       } catch {
         console.log("Message:", event.data);
       }
@@ -43,29 +47,33 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
   return (
     <main className="w-full">
       <div className="w-full h-screen flex">
-        <div className="w-full bg-white to-primary drop-shadow-md py-2 px-4 absolute z-40 min-h-16 flex justify-between items-center">
-          <div
-            className={`flex items-end gap-x-1 transition-all pointer-events-none`}
-          >
-            <Image
-              alt="logo"
-              src={"/eduGen-Logo.png"}
-              width={50}
-              height={50}
-              className={`w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10`}
-            />
-            <h1
-              className={`font-bold leading-none text-sm w-full sm:text-lg text-primary text-start whitespace-nowrap `}
+        {!worksheetId && (
+          <div className="w-full bg-white to-primary drop-shadow-md py-2 px-4 absolute z-40 min-h-16 flex justify-between items-center">
+            <div
+              className={`flex items-end gap-x-1 transition-all pointer-events-none`}
             >
-              Edugen AI
-            </h1>
+              <Image
+                alt="logo"
+                src={"/eduGen-Logo.png"}
+                width={50}
+                height={50}
+                className={`w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10`}
+              />
+              <h1
+                className={`font-bold leading-none text-sm w-full sm:text-lg text-primary text-start whitespace-nowrap `}
+              >
+                Edugen AI
+              </h1>
+            </div>
           </div>
-        </div>
-        <Sidebar>
-          {orgs.map((item) => (
-            <SidebarItem key={item.id} orgId={item.id} label={item.name} />
-          ))}
-        </Sidebar>
+        )}
+        {!worksheetId && (
+          <Sidebar>
+            {orgs.map((item) => (
+              <SidebarItem key={item.id} orgId={item.id} label={item.name} />
+            ))}
+          </Sidebar>
+        )}
         {children}
       </div>
     </main>

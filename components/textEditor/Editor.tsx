@@ -14,12 +14,13 @@ import Placeholder from "@tiptap/extension-placeholder";
 import TaskList from "@tiptap/extension-task-list";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Typography } from "@tiptap/extension-typography";
-import { EditorView } from "prosemirror-view";
+// import { EditorView } from "prosemirror-view";
 import { useThreads } from "@liveblocks/react/suspense";
 // import { DocumentSpinner } from "@/primitives/Spinner";
 
 import { SelectionToolbar, StaticToolbar } from "./toolbars/toolbars";
 import { CustomTaskItem } from "./customTaskItem";
+import { ExportToWord } from "@/lib/exportToWord";
 
 export function Editor() {
   const liveblocks = useLiveblocksExtension();
@@ -33,6 +34,7 @@ export function Editor() {
     },
     extensions: [
       liveblocks,
+      ExportToWord,
       StarterKit.configure({
         blockquote: {
           HTMLAttributes: {
@@ -133,7 +135,11 @@ export function Editor() {
           className="relative min-h-full w-full bg-white"
         />
         <FloatingComposer editor={editor} style={{ width: 350 }} />
-        <FloatingThreads editor={editor} style={{ width: 350 }} />
+        <FloatingThreads
+          editor={editor}
+          style={{ width: 350 }}
+          threads={threads}
+        />
         <SelectionToolbar editor={editor} />
       </div>
     </div>

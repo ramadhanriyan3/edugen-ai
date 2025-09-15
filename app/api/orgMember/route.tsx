@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma.db";
 import { NextRequest, NextResponse } from "next/server";
 
-// GET WORKSHEET LIST
+// GET MEMBER LIST
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const orgId = searchParams.get("orgId");
@@ -18,18 +18,18 @@ export async function GET(req: NextRequest) {
       return new NextResponse("Missing organization ID", { status: 400 });
     }
 
-    const worksheets = await prisma.worksheet.findMany({
+    const members = await prisma.organizationMember.findMany({
       where: {
         orgId: orgId,
       },
       include: {
-        owners: true,
+        user: true,
       },
     });
 
-    return NextResponse.json(worksheets);
+    return NextResponse.json(members);
   } catch (err) {
-    console.log("GET_WORKSHEETS", err);
+    console.log("GET_MEMBERS", err);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
@@ -40,7 +40,6 @@ export async function POST(req: NextRequest) {
   const orgId = searchParams.get("orgId");
   const session = await auth();
   const userId = session?.user?.id;
-  const body = await req.json();
 
   try {
     if (!userId) {
@@ -51,29 +50,33 @@ export async function POST(req: NextRequest) {
       return new NextResponse("Missing organization ID", { status: 400 });
     }
 
-    const worksheet = await prisma.worksheet.create({
+    const exists = await prisma.organizationMember.findUnique({
+      where: { userId_orgId: { userId, orgId } },
+    });
+    if (exists) return new NextResponse("Already a member", { status: 400 });
+
+    const member = await prisma.organizationMember.create({
       data: {
-        title: body.title,
         orgId,
-        ownerId: userId,
+        userId,
+        role: "member",
       },
     });
 
-    return NextResponse.json(worksheet, { status: 201 });
+    return NextResponse.json(member, { status: 201 });
   } catch (err) {
-    console.log("GET_WORKSHEETS", err);
+    console.log("ADD_MEMBER", err);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
 
-// EDIT_SHET_INFO
+// EDIT_ROLE_MEMBER
 export async function PATCH(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const orgId = searchParams.get("orgId");
-  const sheetId = searchParams.get("sheetId");
+  const memberId = searchParams.get("memberId");
   const session = await auth();
   const userId = session?.user?.id;
-  const body = await req.json();
 
   try {
     if (!userId) {
@@ -84,40 +87,43 @@ export async function PATCH(req: NextRequest) {
       return new NextResponse("Missing organization ID", { status: 400 });
     }
 
-    const worksheet = await prisma.worksheet.findFirst({
+    const member = await prisma.organizationMember.findFirst({
       where: {
-        id: sheetId!,
-        ownerId: userId,
+        userId,
+        orgId: orgId,
+        role: "owner",
       },
     });
 
-    if (!worksheet) {
+    if (!member) {
       return new NextResponse("Not found or not Owner", { status: 404 });
     }
 
-    await prisma.worksheet.update({
-      where: {
-        id: sheetId!,
-      },
-      data: {
-        //Nanti tambahkan sistem untuk ganti owner
-        title: body.title,
-        ownerId: body.ownerId,
-      },
-    });
+    await prisma.$transaction([
+      prisma.organizationMember.update({
+        where: { id: memberId! },
+        data: { role: "owner" },
+      }),
+      prisma.organizationMember.update({
+        where: {
+          userId_orgId: { userId, orgId },
+        },
+        data: { role: "member" },
+      }),
+    ]);
 
-    return new NextResponse("Workseet Edited", { status: 200 });
+    return new NextResponse("Member status Edited", { status: 200 });
   } catch (err) {
-    console.log("EDIT_WORKSHEET", err);
+    console.log("EDIT_MEMBER", err);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
 
-// DELETE WORKSEET
+// DELETE Member
 export async function DELETE(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const orgId = searchParams.get("orgId");
-  const sheetId = searchParams.get("sheetId");
+  const memberId = searchParams.get("memberId");
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -130,26 +136,27 @@ export async function DELETE(req: NextRequest) {
       return new NextResponse("Missing organization ID", { status: 400 });
     }
 
-    const worksheet = await prisma.worksheet.findFirst({
+    const member = await prisma.organizationMember.findFirst({
       where: {
-        id: sheetId!,
-        ownerId: userId,
+        userId,
+        orgId: orgId,
+        role: "owner",
       },
     });
 
-    if (!worksheet) {
+    if (!member) {
       return new NextResponse("Not found or not Owner", { status: 404 });
     }
 
-    await prisma.worksheet.delete({
+    await prisma.organizationMember.delete({
       where: {
-        id: sheetId!,
+        id: memberId!,
       },
     });
 
-    return new NextResponse("Workseet Deleted", { status: 200 });
+    return new NextResponse("a user has Deleted", { status: 200 });
   } catch (err) {
-    console.log("DELETE_WORKSHEET", err);
+    console.log("DELETE_MEMBER", err);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
