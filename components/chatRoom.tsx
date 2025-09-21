@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { getExamById } from "@/actions/exam.action";
 import Loading from "@/components/loading";
-import { useExamFormStore } from "@/lib/store/generatorFormStore";
+import { useExamFormStore } from "@/store/generatorFormStore";
 
 type questionsType = {
   id: string;

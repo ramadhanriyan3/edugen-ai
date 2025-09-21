@@ -14,15 +14,14 @@ import Placeholder from "@tiptap/extension-placeholder";
 import TaskList from "@tiptap/extension-task-list";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Typography } from "@tiptap/extension-typography";
-// import { EditorView } from "prosemirror-view";
+
 import { useThreads } from "@liveblocks/react/suspense";
-// import { DocumentSpinner } from "@/primitives/Spinner";
 
 import { SelectionToolbar, StaticToolbar } from "./toolbars/toolbars";
 import { CustomTaskItem } from "./customTaskItem";
 import { ExportToWord } from "@/lib/exportToWord";
 
-export function Editor() {
+export function Editor({ sheetId, orgId }: { sheetId: string; orgId: string }) {
   const liveblocks = useLiveblocksExtension();
 
   const editor = useEditor({
@@ -122,18 +121,19 @@ export function Editor() {
   const { threads } = useThreads();
 
   return (
-    <div className="flex flex-col bg-[rgb(244,244,245)] absolute top-0 right-0 left-0 bottom-0">
+    <div className="flex flex-col bg-[rgb(244,244,245)] absolute inset-0">
       <div
-        className="top-0 left-0 bottom-0 right-0 flex-shrink-0 flex-grow-0 flex justify-between items-start bg-white 
-      border-1 border-gray-100 px-2 py-1 z-[100]"
+        className="flex-shrink-0 flex justify-between items-start bg-white 
+        border-b border-gray-200 px-2 py-1 z-[100] shadow-sm"
       >
-        <StaticToolbar editor={editor} />
+        <StaticToolbar editor={editor} orgId={orgId} sheetId={sheetId} />
       </div>
-      <div className="flex flex-1 overflow-y-scroll p-4 pb-0">
-        <EditorContent
-          editor={editor}
-          className="relative min-h-full w-full bg-white"
-        />
+
+      <div className="flex-1 overflow-y-auto p-6">
+        <div className="relative min-h-screen w-full  bg-white shadow-md rounded-md p-8">
+          <EditorContent editor={editor} />
+        </div>
+
         <FloatingComposer editor={editor} style={{ width: 350 }} />
         <FloatingThreads
           editor={editor}

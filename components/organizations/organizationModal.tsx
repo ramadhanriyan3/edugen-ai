@@ -20,7 +20,7 @@ const OrganizationModal = ({ orgId, children }: OrganizationModalProps) => {
         <div className="flex flex-col gap-y-4">
           <DialogTitle className="sr-only" />
           <p className="font-bold  text-primary">Settings</p>
-          <OrganizationModalContent />
+          <OrganizationModalContent orgId={orgId!} />
         </div>
       </DialogContent>
     </Dialog>

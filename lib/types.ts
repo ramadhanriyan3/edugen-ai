@@ -114,6 +114,7 @@ export interface OrganizationMemberType {
   role: MemberRoleType;
 
   organization?: OrganizationType;
+  user?: UserType;
 }
 
 // =========================

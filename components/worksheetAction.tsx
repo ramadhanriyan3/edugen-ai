@@ -4,6 +4,8 @@ import { DropdownMenuContentProps } from "@radix-ui/react-dropdown-menu";
 import { ReactNode } from "react";
 import { Link2, Trash2, PencilLine } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 import {
   DropdownMenu,
@@ -13,7 +15,7 @@ import {
 } from "./ui/dropdown-menu";
 import ConfirmModal from "./confirmModal";
 import { Button } from "./ui/button";
-import { useRenameModal } from "@/lib/store/use-rename-modal";
+import { useRenameModal } from "@/store/use-rename-modal";
 
 interface ActionProps {
   children: ReactNode;
@@ -21,18 +23,35 @@ interface ActionProps {
   sideOffset?: DropdownMenuContentProps["sideOffset"];
   id: string;
   title: string;
+  orgId: string;
 }
 
-const Action = ({ children, side, sideOffset, id, title }: ActionProps) => {
+const Action = ({
+  children,
+  side,
+  sideOffset,
+  id,
+  title,
+  orgId,
+}: ActionProps) => {
   const { onOpen } = useRenameModal();
+  const router = useRouter();
 
   const onCopyLink = () => {
     navigator.clipboard
-      .writeText(`${window.location.origin}/board/${id}`)
+      .writeText(`${window.location.origin}/${orgId}/worksheets/${id}`)
       .then(() => toast.success("Link copied"));
   };
 
-  const onDelete = () => {};
+  const onDelete = async () => {
+    axios({
+      method: "delete",
+      url: `/api/sheet/${id}?orgId=${orgId}`,
+    }).then(() => {
+      router.refresh();
+      toast.success("Document has deleted");
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -49,7 +68,7 @@ const Action = ({ children, side, sideOffset, id, title }: ActionProps) => {
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
-            onOpen(id, title);
+            onOpen(id, title, orgId);
           }}
           className="p-2 cursor-pointer"
         >

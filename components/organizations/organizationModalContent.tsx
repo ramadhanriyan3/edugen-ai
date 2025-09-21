@@ -1,11 +1,22 @@
 "use client";
 
-import { Settings, Users2 } from "lucide-react";
+import { Settings, Users2, UserRoundPlus } from "lucide-react";
 import { useState } from "react";
 import OrganizationMembers from "./organizationMembers";
+import OrganizationInvite from "./organizationInvite";
+import OrganizationRename from "./organizationRename";
 
-const OrganizationModalContent = () => {
-  const [position, setPosition] = useState<"setting" | "user">("setting");
+const components = {
+  setting: OrganizationRename,
+  user: OrganizationMembers,
+  invite: OrganizationInvite,
+};
+
+type Position = keyof typeof components;
+
+const OrganizationModalContent = ({ orgId }: { orgId: string }) => {
+  const [position, setPosition] = useState<Position>("setting");
+  const ActiveComponent = components[position];
 
   return (
     <div className="flex w-full h-full bg-white ">
@@ -19,16 +30,18 @@ const OrganizationModalContent = () => {
         <Users2
           onClick={() => setPosition("user")}
           className={`rounded-sm w-8 h-8 p-1 text-primary cursor-pointer hover:bg-primary/30 transition-colors ${
-            position !== "setting" && "bg-primary/30"
+            position === "user" && "bg-primary/30"
+          }`}
+        />
+        <UserRoundPlus
+          onClick={() => setPosition("invite")}
+          className={`rounded-sm w-8 h-8 p-1 text-primary cursor-pointer hover:bg-primary/30 transition-colors ${
+            position === "invite" && "bg-primary/30"
           }`}
         />
       </div>
-      <div className="pl-2">
-        {position === "setting" ? (
-          <div>disini setting</div>
-        ) : (
-          <OrganizationMembers />
-        )}
+      <div className="pl-2 w-full">
+        <ActiveComponent orgId={orgId} />
       </div>
     </div>
   );

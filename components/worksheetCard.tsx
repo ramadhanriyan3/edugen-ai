@@ -42,9 +42,14 @@ const WorksheetCard = ({
          justify-between overflow-hidden"
       >
         <div className="relative flex-1 bg-amber-50">
-          {/* <Image src={imageUrl} alt="doodle" fill className="object-fit" /> */}
           <div className="w-full  h-full opacity-0 group-hover:opacity-20 transition-opacity bg-black " />
-          <Action id={id} title={title} side="right" sideOffset={10}>
+          <Action
+            id={id}
+            orgId={orgId}
+            title={title}
+            side="right"
+            sideOffset={10}
+          >
             <button
               className="absolute z-40 top-1 right-1 aspect-square
             opacity-0 group-hover:opacity-100

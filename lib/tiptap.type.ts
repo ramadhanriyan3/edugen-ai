@@ -10,19 +10,27 @@ export type TextNode = {
 
 export type ParagraphNode = {
   type: "paragraph";
-  attrs?: { textAlign?: "left" | "center" | "right" };
+  attrs?: { textAlign?: "left" | "center" | "right" | "both" | undefined };
   content?: TiptapNode[];
 };
 
 export type HeadingNode = {
   type: "heading";
-  attrs: { level: number; textAlign?: "left" | "center" | "right" };
+  attrs: {
+    level: number;
+    textAlign?: "left" | "center" | "right" | "both" | undefined;
+  };
   content?: TiptapNode[];
 };
 
 export type ImageNode = {
   type: "image";
-  attrs: { src: string; width?: number; height?: number };
+  attrs: {
+    align: string;
+    src: string;
+    width?: number;
+    height?: number;
+  };
 };
 
 export type ListItemNode = {
@@ -47,6 +55,7 @@ export type BlockquoteNode = {
 };
 
 export type LinkNode = {
+  marks: unknown;
   type: "link";
   attrs: { href: string };
   content?: TextNode[];

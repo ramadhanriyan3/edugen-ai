@@ -119,20 +119,3 @@ export async function GET(req: NextRequest) {
     },
   });
 }
-
-export async function PATCH(req: NextRequest) {
-  const body = await req.json();
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  try {
-    if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
-      const orgName = body.name;
-      console.log({ orgName });
-    }
-  } catch (err) {
-    console.log("EDIT_ORG", err);
-    return new NextResponse("Internal Error", { status: 500 });
-  }
-}

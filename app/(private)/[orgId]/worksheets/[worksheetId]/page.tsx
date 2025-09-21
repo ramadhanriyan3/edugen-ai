@@ -11,7 +11,7 @@ export default async function Page({
   return (
     <main>
       <Room roomId={worksheetId} orgId={orgId}>
-        <Editor />
+        <Editor sheetId={worksheetId} orgId={orgId} />
       </Room>
     </main>
   );

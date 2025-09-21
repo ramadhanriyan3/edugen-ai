@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import "@liveblocks/react-ui/styles.css";
 import "@liveblocks/react-tiptap/styles.css";
+import ModalProvider from "@/provider/modal-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
           <div className="w-full  min-h-screen mx-auto flex">{children}</div>
         </SessionProvider>
         <Toaster />
+        <ModalProvider />
       </body>
     </html>
   );

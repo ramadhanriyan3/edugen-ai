@@ -18,7 +18,7 @@ const WorksheetsPage = async ({
   async function getData() {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/sheet?orgId=${orgId}`,
+        `${process.env.NEXT_PUBLIC_URL}/api/sheet?orgId=${orgId}`,
         {
           withCredentials: true,
           headers: {

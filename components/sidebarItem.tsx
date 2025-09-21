@@ -3,7 +3,7 @@
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,20 +11,16 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { deleteExamById } from "@/actions/exam.action";
 import OrganizationModal from "./organizations/organizationModal";
+import axios from "axios";
 
 const SidebarItem = ({ label, orgId }: { label: string; orgId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const pathname = usePathname().split("/")[2];
-  const isSelected = pathname === orgId;
 
   return (
     <div
-      className={`relative group w-full transition rounded-md px-2 py-1 cursor-pointer ${
-        isSelected ? " bg-primary/70 text-white" : "text-primary bg-white/70"
-      } hover:bg-primary/70 hover:text-white flex justify-between items-center drop-shadow-sm`}
+      className={`relative group w-full transition rounded-md px-2 py-1 cursor-pointer hover:bg-primary/70 hover:text-white flex justify-between items-center drop-shadow-sm`}
     >
       <Link
         href={`/${orgId}/worksheets`}
@@ -44,9 +40,7 @@ const SidebarItem = ({ label, orgId }: { label: string; orgId: string }) => {
         >
           <Button variant={"ghost"} className=" rounded-full ">
             <MoreHorizontal
-              className={`w-4 h-4 group-hover:text-white transition-colors ${
-                isSelected ? "text-white" : "text-primary"
-              }`}
+              className={`w-4 h-4 group-hover:text-white transition-colors`}
             />
           </Button>
         </PopoverTrigger>
@@ -54,19 +48,18 @@ const SidebarItem = ({ label, orgId }: { label: string; orgId: string }) => {
           align="end"
           className=" w-fit text-primary bg-primary-foreground p-1"
         >
-          <OrganizationModal>
+          <OrganizationModal orgId={orgId}>
             <p className="w-full p-2 flex items-center hover:bg-black/10 transition-all cursor-pointer rounded-md">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </p>
           </OrganizationModal>
           <p
             className="w-full p-2 flex text-destructive items-center hover:bg-black/10 transition-all cursor-pointer rounded-md"
-            onClick={async () => {
-              await deleteExamById(orgId);
+            onClick={() => {
+              axios.delete(`/api/organization/${orgId}`).then(() => {
+                router.refresh();
+              });
               setIsOpen(false);
-              if (isSelected) {
-                router.push("/");
-              }
             }}
           >
             <Trash2 className="w-4 h-4 mr-2" /> Delete

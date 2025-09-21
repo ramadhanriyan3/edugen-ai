@@ -1,28 +1,42 @@
 import Image from "next/image";
+import { auth } from "@/auth";
 
 import FadeInWrapper from "@/components/fadeInWrapper";
-import ExamGenerateForm from "@/components/form/examGenerateForm";
+// import ExamGenerateForm from "@/components/form/examGenerateForm";
 
-const Page = () => {
+const Page = async () => {
+  const session = await auth();
+
   return (
     <div className="w-full h-full flex items-center justify-center p-4">
       <div className="flex flex-col gap-y-10 items-center py-4 ">
         <div className="w-full flex flex-col items-center justify-center">
           <FadeInWrapper variant="top">
-            <Image
-              alt="logo"
-              src={"/eduGen-Logo.png"}
-              width={150}
-              height={150}
-              className="w-16 h-16 "
-            />
+            <div className="flex items-end justify-center gap-x-4">
+              <Image
+                alt="logo"
+                src={"/eduGen-Logo.png"}
+                width={200}
+                height={200}
+                priority
+                className="w-20 h-20 self-center"
+              />
+              <p className="text-start text-2xl leading-none font-bold text-primary">
+                Welcome <br /> to Edugen AI
+              </p>
+            </div>
           </FadeInWrapper>
-          <h2 className="text-primary text-center text-xl sm:text-2xl font-bold drop-shadow-md">
-            Design the perfect test: What type of questions do you want to
-            create?
-          </h2>
         </div>
-        <ExamGenerateForm />
+        <div className="w-full bg-primary/80 rounded-lg shadow-lg p-4 mx-2 flex items-center justify-center flex-col gap-y-2">
+          <p className="font-semibold text-xl text-primary-foreground ">
+            {" "}
+            Hi, {session?.user?.name} ! 👋
+          </p>
+          <p className=" font-semibold text-primary-foreground text-center">
+            Create exams faster than ever! Pick an organization from the sidebar
+            to begin.
+          </p>
+        </div>
       </div>
     </div>
   );
