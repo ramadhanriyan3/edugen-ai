@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// CREATE_WORKSHEET
+// CREATE_MEMBER
 export async function POST(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const orgId = searchParams.get("orgId");

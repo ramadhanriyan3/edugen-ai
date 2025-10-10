@@ -13,6 +13,7 @@ import { ToolbarBlockSelector } from "./toolbarBlockSelector";
 import { ToolbarList } from "./toolbarList";
 import { WorksheetType } from "@/lib/types";
 import { useRenameModal } from "@/store/use-rename-modal";
+import { Avatars } from "./avatars";
 
 type Props = {
   editor: Editor | null;
@@ -56,7 +57,9 @@ export function StaticToolbar({ editor, sheetId, orgId }: Props) {
             </div>
           </div>
         </div>
-        <div>disini avatar</div>
+        <div>
+          <Avatars />
+        </div>
       </div>
       <Toolbar editor={editor} data-toolbar="static" className="min-h-12">
         <Toolbar.SectionHistory />

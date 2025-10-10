@@ -16,6 +16,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import Notification from "@/components/notification";
+import { OrgInvitationType } from "@/lib/types";
 
 interface Organization {
   id: string;
@@ -27,6 +29,7 @@ interface Organization {
 
 const PrivateLayout = ({ children }: { children: ReactNode }) => {
   const [orgs, setOrgs] = useState<Organization[]>([]);
+  const [notifList, setNotifList] = useState<OrgInvitationType[]>([]);
   const session = useSession();
   const router = useRouter();
 
@@ -55,6 +58,31 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const eventSource = new EventSource("/api/invitation");
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        setNotifList(data);
+        console.log("ini jalan");
+      } catch {
+        console.log("Message:", event.data);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      console.error("SSE error:", err);
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
+  const notifLabel = notifList.length > 9 ? "9+" : notifList.length;
+
   return (
     <ReactQueryProvider>
       <main className="w-full">
@@ -78,9 +106,26 @@ const PrivateLayout = ({ children }: { children: ReactNode }) => {
                 </h1>
               </div>
               <div className="w-fit flex items-center justify-items-end gap-x-4">
-                <div className="w-fit rounded-full group hover:bg-primary/70 cursor-pointer transition-colors aspect-square p-1">
-                  <Bell className="text-primary group-hover:text-white w-5 h-5 font-semibold" />
-                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <div className="w-fit rounded-full group hover:bg-primary/70 cursor-pointer transition-colors aspect-square p-1 relative">
+                      {!!notifList.length && (
+                        <div className="aspect-square w-4 rounded-full bg-destructive text-[10px] absolute -top-[4px] -right-[3px] text-white items-center justify-center flex ">
+                          {notifLabel}
+                        </div>
+                      )}
+                      <Bell className="text-primary group-hover:text-white w-6 h-6 font-semibold" />
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-fit p-0"
+                    side="top"
+                    sideOffset={24}
+                  >
+                    <Notification notifications={notifList} />
+                  </PopoverContent>
+                </Popover>
+
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button

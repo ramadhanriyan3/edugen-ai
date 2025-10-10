@@ -7,6 +7,7 @@ import { LoaderCircle, Trash2Icon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useFetch } from "@/hooks/use-fetch";
 import { useApiMutation } from "@/hooks/use-api-mutation";
+import { toast } from "sonner";
 
 const OrganizationMembers = ({ orgId }: { orgId: string }) => {
   const { data = [], isLoading } = useFetch<OrganizationMemberType[]>(
@@ -20,12 +21,24 @@ const OrganizationMembers = ({ orgId }: { orgId: string }) => {
     ["members", orgId]
   );
 
+  const { mutate: patch, error: patchError } = useApiMutation(
+    "patch",
+    (memberId) => `/api/orgMember?orgId=${orgId}&memberId=${memberId}`
+  );
+
   const member = data.filter((member) => member.role !== "owner");
   const owner = data.filter((member) => member.role === "owner")[0];
 
   const handleDelete = (id: string) => {
     const fullUrl = `/api/orgMember?orgId=${orgId}&memberId=${id}`;
     mutate({ params: fullUrl });
+  };
+
+  const handleSetAdmin = (memberId: string) => {
+    patch({ params: memberId });
+    if (!patchError) {
+      toast.error("Your not Admin");
+    }
   };
 
   return (
@@ -77,6 +90,9 @@ const OrganizationMembers = ({ orgId }: { orgId: string }) => {
                     <Button
                       className="bg-primary text-white text-xs"
                       size={"sm"}
+                      onClick={() => {
+                        handleSetAdmin(item.id);
+                      }}
                     >
                       Set as Admin
                     </Button>

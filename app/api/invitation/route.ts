@@ -23,6 +23,10 @@ export async function GET(req: NextRequest) {
           invitedId: userId,
           status: "pending",
         },
+        include: {
+          owner: true,
+          organization: true,
+        },
       });
 
       controller.enqueue(
@@ -35,6 +39,11 @@ export async function GET(req: NextRequest) {
           where: {
             updatedAt: { gt: lastUpdatedAt },
             invitedId: userId,
+            status: "pending",
+          },
+          include: {
+            owner: true,
+            organization: true,
           },
           orderBy: {
             updatedAt: "desc",

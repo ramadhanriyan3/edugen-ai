@@ -135,7 +135,7 @@ export interface OrgInvitationType {
   updatedAt: string | number | Date;
 
   organization?: OrganizationType;
-  owners?: UserType;
+  owner?: UserType;
 }
 
 // =========================
