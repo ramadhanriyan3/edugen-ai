@@ -85,6 +85,25 @@ export const ExportToWord = Extension.create({
                           ? {}
                           : undefined,
                         strike: node.marks?.some((m) => m.type === "strike"),
+                        size: (() => {
+                          const sizeMark = node.marks?.find(
+                            (m) => m.type === "textStyle" && m.attrs?.fontSize
+                          );
+                          if (
+                            sizeMark &&
+                            typeof sizeMark.attrs?.fontSize === "string"
+                          ) {
+                            const fontSize = parseInt(sizeMark.attrs.fontSize);
+                            if (!isNaN(fontSize)) return fontSize * 2;
+                          }
+                          return 24;
+                        })(),
+                        font: (() => {
+                          const fontMark = node.marks?.find(
+                            (m) => m.type === "textStyle" && m.attrs?.fontFamily
+                          );
+                          return fontMark?.attrs?.fontFamily || undefined;
+                        })(),
                       })
                     );
                   } else if (node.type === "hardBreak") {

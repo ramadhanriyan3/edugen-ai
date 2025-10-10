@@ -14,6 +14,8 @@ import { ToolbarList } from "./toolbarList";
 import { WorksheetType } from "@/lib/types";
 import { useRenameModal } from "@/store/use-rename-modal";
 import { Avatars } from "./avatars";
+import { FontSelector } from "./fontSelector";
+import { FontSize } from "./fontSize";
 
 type Props = {
   editor: Editor | null;
@@ -61,10 +63,16 @@ export function StaticToolbar({ editor, sheetId, orgId }: Props) {
           <Avatars />
         </div>
       </div>
-      <Toolbar editor={editor} data-toolbar="static" className="min-h-12">
+      <Toolbar
+        editor={editor}
+        data-toolbar="static"
+        className="min-h-12 flex-wrap flex"
+      >
         <Toolbar.SectionHistory />
         <Toolbar.Separator />
-        <ToolbarBlockSelector />
+        <FontSelector editor={editor} />
+        <FontSize editor={editor} />
+        {/* <ToolbarBlockSelector /> */}
         <Toolbar.Separator />
         <Toolbar.SectionInline />
         <Toolbar.Separator />

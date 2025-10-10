@@ -31,7 +31,7 @@ export function ToolbarList({ editor }: Props) {
 
       <Toolbar.Toggle
         name="Task List"
-        icon={<SquareCheckBig size={"sm"} />}
+        icon={<SquareCheckBig />}
         active={editor?.isActive("taskList") ?? false}
         onClick={() => editor?.chain().focus().toggleTaskList().run()}
       />

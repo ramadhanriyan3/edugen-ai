@@ -5,10 +5,13 @@ import {
   FloatingComposer,
   FloatingThreads,
 } from "@liveblocks/react-tiptap";
+import Image from "next/image";
+import FontFamily from "@tiptap/extension-font-family";
+import TextStyle from "@tiptap/extension-text-style";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Highlight from "@tiptap/extension-highlight";
-import { Image } from "@tiptap/extension-image";
+import { Image as TiptapImage } from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import TaskList from "@tiptap/extension-task-list";
@@ -20,6 +23,15 @@ import { useThreads } from "@liveblocks/react/suspense";
 import { SelectionToolbar, StaticToolbar } from "./toolbars/toolbars";
 import { CustomTaskItem } from "./customTaskItem";
 import { ExportToWord } from "@/lib/exportToWord";
+import { FontSize } from "@/lib/fontSizeExtention";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import AiModal from "../aiModal";
 
 export function Editor({ sheetId, orgId }: { sheetId: string; orgId: string }) {
   const liveblocks = useLiveblocksExtension();
@@ -33,6 +45,11 @@ export function Editor({ sheetId, orgId }: { sheetId: string; orgId: string }) {
     },
     extensions: [
       liveblocks,
+      TextStyle,
+      FontSize,
+      FontFamily.configure({
+        types: ["textStyle"],
+      }),
       ExportToWord,
       StarterKit.configure({
         blockquote: {
@@ -85,7 +102,7 @@ export function Editor({ sheetId, orgId }: { sheetId: string; orgId: string }) {
           class: "tiptap-highlight",
         },
       }),
-      Image.configure({
+      TiptapImage.configure({
         HTMLAttributes: {
           class: "tiptap-image",
         },
@@ -128,7 +145,6 @@ export function Editor({ sheetId, orgId }: { sheetId: string; orgId: string }) {
       >
         <StaticToolbar editor={editor} orgId={orgId} sheetId={sheetId} />
       </div>
-
       <div className="flex-1 overflow-y-auto p-6">
         <div className="relative min-h-screen w-full  bg-white shadow-md rounded-md p-8">
           <EditorContent editor={editor} />
@@ -142,6 +158,23 @@ export function Editor({ sheetId, orgId }: { sheetId: string; orgId: string }) {
         />
         <SelectionToolbar editor={editor} />
       </div>
+      <Dialog>
+        <DialogTrigger className="absolute w-fit  bottom-10 right-14" asChild>
+          <Button className="flex items-center gap-0 px-1 p-0 rounded-full">
+            <Image
+              alt="logo"
+              width={30}
+              height={30}
+              src={"/eduGen-white.png"}
+            />
+            <p className="pr-2 text-xs">Use AI</p>
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="max-w-md mx-4 p-0 rounded-md">
+          <DialogTitle className="sr-only" />
+          <AiModal />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

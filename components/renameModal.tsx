@@ -72,7 +72,7 @@ export function RenameModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] [&_[data-radix-dialog-close]]:hidden">
+      <DialogContent className="max-w-[340px] [&_[data-radix-dialog-close]]:hidden mx-2 rounded-md">
         <DialogHeader>
           <DialogTitle>Edit document title</DialogTitle>
           <DialogDescription>
@@ -94,16 +94,18 @@ export function RenameModal() {
                 </FormItem>
               )}
             />
-            <DialogFooter>
+            <DialogFooter className="gap-x-2 flex-nowrap flex-row justify-end ">
+              <DialogClose asChild>
+                <Button variant={"outline"} className="w-fit">
+                  Cancel
+                </Button>
+              </DialogClose>
               <Button
-                className="bg-blue-900 hover:bg-blue-950 items-end"
+                className="bg-blue-900 hover:bg-blue-950 items-end w-fit"
                 type="submit"
               >
                 Save
               </Button>
-              <DialogClose asChild>
-                <Button variant={"outline"}>Cancel</Button>
-              </DialogClose>
             </DialogFooter>
           </form>
         </Form>
