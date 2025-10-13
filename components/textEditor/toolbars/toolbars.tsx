@@ -84,7 +84,10 @@ export function StaticToolbar({ editor, sheetId, orgId }: Props) {
         <Toolbar.Separator />
         <Toolbar.SectionCollaboration />
         <Toolbar.Separator />
-        <ToolbarExport editor={editor} />
+        <ToolbarExport
+          editor={editor}
+          title={worksheetData?.title || "Document"}
+        />
       </Toolbar>
     </div>
   );

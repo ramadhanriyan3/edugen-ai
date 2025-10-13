@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { useFetch } from "@/hooks/use-fetch";
 import { OrganizationType } from "@/lib/types";
 import { useApiMutation } from "@/hooks/use-api-mutation";
+import { DialogClose } from "../ui/dialog";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -91,8 +92,12 @@ const OrganizationRename = ({ orgId }: { orgId: string }) => {
           >
             Save
           </Button>
-
-          <Button variant={"outline"}>Cancel</Button>
+          <DialogClose
+            type="button"
+            className="border border-blue-900 px-2 rounded-md text-sm text-blue-900 hover:bg-black/10"
+          >
+            Cancel
+          </DialogClose>
         </div>
       </form>
     </Form>

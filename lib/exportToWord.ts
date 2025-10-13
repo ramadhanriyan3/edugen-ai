@@ -15,7 +15,7 @@ import {
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     exportToWord: {
-      exportToWord: () => ReturnType;
+      exportToWord: (title: string) => ReturnType;
     };
   }
 }
@@ -58,7 +58,7 @@ export const ExportToWord = Extension.create({
   addCommands() {
     return {
       exportToWord:
-        (): Command =>
+        (title): Command =>
         ({ editor }) => {
           (async () => {
             try {
@@ -329,7 +329,7 @@ export const ExportToWord = Extension.create({
               });
 
               const blob = await Packer.toBlob(doc);
-              saveAs(blob, "document.docx");
+              saveAs(blob, `${title}.docx`);
             } catch (error) {
               console.error("Error exporting to Word:", error);
             }

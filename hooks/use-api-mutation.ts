@@ -4,9 +4,18 @@ import axios, { AxiosRequestConfig } from "axios";
 export function useApiMutation<TResponse = unknown, TPayload = unknown>(
   method: "post" | "put" | "patch" | "delete",
   url: string | ((params: string) => string),
+  useFormdata?: boolean,
   invalidateKey?: string[]
 ) {
   const queryClient = useQueryClient();
+
+  const useHeaders = !useFormdata
+    ? {
+        "Content-Type": "application/json",
+      }
+    : {
+        "Content-Type": "multipart/form-data",
+      };
 
   return useMutation<TResponse, Error, { payload?: TPayload; params?: string }>(
     {
@@ -16,9 +25,7 @@ export function useApiMutation<TResponse = unknown, TPayload = unknown>(
         const config: AxiosRequestConfig = {
           method,
           url: finalUrl,
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: useHeaders,
         };
 
         if (payload !== undefined) {

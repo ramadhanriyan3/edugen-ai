@@ -32,9 +32,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import AiModal from "../aiModal";
+import { useState } from "react";
 
 export function Editor({ sheetId, orgId }: { sheetId: string; orgId: string }) {
   const liveblocks = useLiveblocksExtension();
+  const [isOpen, setIsOpen] = useState(false);
 
   const editor = useEditor({
     editorProps: {
@@ -158,7 +160,7 @@ export function Editor({ sheetId, orgId }: { sheetId: string; orgId: string }) {
         />
         <SelectionToolbar editor={editor} />
       </div>
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger className="absolute w-fit  bottom-10 right-14" asChild>
           <Button className="flex items-center gap-0 px-1 p-0 rounded-full">
             <Image
@@ -172,7 +174,7 @@ export function Editor({ sheetId, orgId }: { sheetId: string; orgId: string }) {
         </DialogTrigger>
         <DialogContent className="max-w-md mx-4 p-0 rounded-md">
           <DialogTitle className="sr-only" />
-          <AiModal />
+          <AiModal editor={editor} setClose={() => setIsOpen(false)} />
         </DialogContent>
       </Dialog>
     </div>
