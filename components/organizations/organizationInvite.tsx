@@ -15,7 +15,7 @@ import { useApiMutation } from "@/hooks/use-api-mutation";
 import { toast } from "sonner";
 
 const OrganizationInvite = ({ orgId }: { orgId: string }) => {
-  const session = useSession();
+  const { data: session } = useSession();
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
@@ -29,7 +29,7 @@ const OrganizationInvite = ({ orgId }: { orgId: string }) => {
     `/api/users?search=${debouncedSearch}`
   );
 
-  const users = data?.filter((user) => user.id !== session.data?.user?.id);
+  const users = data?.filter((user) => user.id !== session?.user?.id);
 
   const handleInvitation = (memberId: string) => {
     mutate({ params: memberId });

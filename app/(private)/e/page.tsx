@@ -2,7 +2,6 @@ import Image from "next/image";
 import { auth } from "@/auth";
 
 import FadeInWrapper from "@/components/fadeInWrapper";
-// import ExamGenerateForm from "@/components/form/examGenerateForm";
 
 const Page = async () => {
   const session = await auth();

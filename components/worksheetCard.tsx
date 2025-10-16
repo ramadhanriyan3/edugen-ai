@@ -1,12 +1,10 @@
 "use client";
 
-// import Image from "next/image";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
 
 import WorksheetFooter from "./worksheetFooter";
-// import { toast } from "sonner";
 import Action from "./worksheetAction";
 import { useSession } from "next-auth/react";
 

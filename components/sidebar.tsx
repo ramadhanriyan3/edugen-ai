@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 
@@ -8,14 +8,36 @@ import { Button } from "@/components/ui/button";
 import { NewOrgModal } from "./newOrgModal";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import SidebarItem from "./sidebarItem";
+import { Organization } from "@prisma/client";
 
-interface SidebarProps {
-  children: ReactNode;
-}
-
-const Sidebar = ({ children }: SidebarProps) => {
+const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+
+  const [orgs, setOrgs] = useState<Organization[]>([]);
+
+  useEffect(() => {
+    const eventSource = new EventSource("/api/organization");
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        setOrgs(data);
+      } catch {
+        console.log("Message:", event.data);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      console.error("SSE error:", err);
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   const handleCreate = (name: string) => {
     axios
@@ -66,7 +88,9 @@ const Sidebar = ({ children }: SidebarProps) => {
           <div
             className={`h-full pt-10 flex gap-y-2 flex-col overflow-y-auto overflow-x-hidden`}
           >
-            {children}
+            {orgs.map((item) => (
+              <SidebarItem key={item.id} orgId={item.id} label={item.name} />
+            ))}
           </div>
           <div className={`w-full flex  flex-col gap-y-4 mb-4`}>
             <NewOrgModal handleCreate={handleCreate}>

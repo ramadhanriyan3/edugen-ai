@@ -1,16 +1,21 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
+import Nodemailer from "next-auth/providers/nodemailer";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./lib/prisma.db";
-import Nodemailer from "next-auth/providers/nodemailer";
+import authConfig from "./auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: "jwt",
+  },
+  ...authConfig,
   providers: [
-    Google,
+    ...authConfig.providers,
     Nodemailer({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
+        port: Number(process.env.EMAIL_SERVER_PORT),
         auth: {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.EMAIL_SERVER_PASSWORD,
@@ -19,14 +24,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       from: process.env.EMAIL_FROM,
     }),
   ],
-  adapter: PrismaAdapter(prisma),
+
   secret: process.env.AUTH_SECRET,
   callbacks: {
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
+    async session({ session, token }) {
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
       }
-
       return session;
     },
   },

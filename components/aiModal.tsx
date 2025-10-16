@@ -43,10 +43,8 @@ interface AiModalProps {
 
 const AiModal = ({ editor, setClose }: AiModalProps) => {
   const session = useSession().data?.user;
-  const firstname = session?.name?.split(" ")[0];
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
   const { mutateAsync } = useApiMutation("post", "/api/aiGenerate", true);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,6 +53,8 @@ const AiModal = ({ editor, setClose }: AiModalProps) => {
       prompt: "",
     },
   });
+
+  const firstname = session?.name?.split(" ")[0];
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
