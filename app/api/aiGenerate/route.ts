@@ -61,7 +61,6 @@ export async function POST(req: NextRequest) {
       }
 
       if (file.type === ALLOWED_MIME_TYPES[0] || file.name.endsWith(".pdf")) {
-        console.log("APAKAH JALAN");
         const pdfData = await pdf(buffer);
         fileContent = pdfData.text;
       }

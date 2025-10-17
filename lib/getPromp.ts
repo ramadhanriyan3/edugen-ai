@@ -3,8 +3,8 @@ export function createOptimizedPrompt(
   fileContent: string
 ): string {
   const truncatedFileContent =
-    fileContent.length > 4000
-      ? fileContent.substring(0, 4000) + "\n[Content truncated for brevity]"
+    fileContent.length > 20000
+      ? fileContent.substring(0, 20000) + "\n[Content truncated for brevity]"
       : fileContent;
 
   const fileContext = fileContent

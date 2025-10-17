@@ -7,7 +7,6 @@ export async function GET(req: NextRequest) {
   const session = await auth();
   const userId = session?.user?.id;
   const encoder = new TextEncoder();
-
   if (!userId) {
     return new NextResponse("Unauthorize", { status: 401 });
   }

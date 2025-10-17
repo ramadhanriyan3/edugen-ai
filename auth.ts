@@ -8,6 +8,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
+    maxAge: 7 * 24 * 60 * 60,
+    updateAge: 23 * 6 * 60,
   },
   ...authConfig,
   providers: [
@@ -27,6 +29,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   secret: process.env.AUTH_SECRET,
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
     async session({ session, token }) {
       if (session.user && token.id) {
         session.user.id = token.id as string;

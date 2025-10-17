@@ -8,8 +8,8 @@ const PublicLayout = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto flex flex-col min-h-screen p-4">
-      <nav className="flex justify-between items-center">
+    <div className="w-full mx-auto flex flex-col items-center min-h-screen p-4  bg-gradient-to-br from-primary to-white">
+      <nav className="flex justify-between items-center w-full max-w-[1440px]">
         <Link href={"/"}>
           <div className="flex items-end gap-x-2 w-fit cursor-pointer">
             <Image
@@ -41,10 +41,10 @@ const PublicLayout = async ({ children }: { children: ReactNode }) => {
           )}
         </div>
       </nav>
-      <div className="flex-1 bg-transparent items-center justify-center flex">
+      <div className="flex-1 bg-transparent items-center justify-center flex w-full">
         {children}
       </div>
-      <footer className="py-5 md:pb-8 flex gap-y-5 justify-between flex-wrap-reverse">
+      <footer className="py-5 md:pb-8 flex gap-y-5 justify-between flex-wrap-reverse w-full  max-w-[1440px]">
         <div className="flex w-fit flex-col gap-y-4 mx-auto sm:mx-0">
           <div className="flex items-end gap-x-2 w-fit">
             <Image
