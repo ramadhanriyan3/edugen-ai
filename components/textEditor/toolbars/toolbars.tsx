@@ -29,7 +29,7 @@ export function StaticToolbar({ editor, sheetId, orgId }: Props) {
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_URL}/api/sheet/${sheetId}`)
+      .get(`/api/sheet/${sheetId}`)
       .then((res) => {
         setWorksheetData(res.data);
       })
