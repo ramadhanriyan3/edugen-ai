@@ -17,8 +17,7 @@ const OrganizationMembers = ({ orgId }: { orgId: string }) => {
 
   const { mutate } = useApiMutation(
     "delete",
-    (memberId) => `/api/orgMember?orgId=${orgId}&memberId=${memberId}`,
-    ["members", orgId]
+    (memberId) => `/api/orgMember?orgId=${orgId}&memberId=${memberId}`
   );
 
   const { mutate: patch, error: patchError } = useApiMutation(
