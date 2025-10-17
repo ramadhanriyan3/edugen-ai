@@ -13,7 +13,6 @@ export interface UserType {
 
   accounts?: AccountType[];
   sessions?: SessionType[];
-  exams?: ExamType[];
   organizations?: OrganizationType[];
   orgInvitations?: OrgInvitationType[];
   worksheets?: WorksheetType[];
@@ -54,28 +53,6 @@ export interface VerificationTokenType {
   identifier: string;
   token: string;
   expires: string;
-}
-
-// =========================
-// Exam & Question Models
-// =========================
-export interface ExamType {
-  id: string;
-  userId: string;
-  title: string;
-  createdAt: string | number | Date;
-  updatedAt: string | number | Date;
-
-  user?: UserType;
-  questions?: QuestionType[];
-}
-
-export interface QuestionType {
-  id: string;
-  examId: string;
-  content: string;
-  createdAt: string | number | Date;
-  exam?: ExamType;
 }
 
 // =========================

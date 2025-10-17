@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Input } from "../ui/input";
-import { UserType } from "@/lib/types";
+import { OrganizationMemberType, UserType } from "@/lib/types";
 import { useFetch } from "@/hooks/use-fetch";
 import { Label } from "../ui/label";
 import { useApiMutation } from "@/hooks/use-api-mutation";
@@ -29,7 +29,21 @@ const OrganizationInvite = ({ orgId }: { orgId: string }) => {
     `/api/users?search=${debouncedSearch}`
   );
 
-  const users = data?.filter((user) => user.id !== session?.user?.id);
+  const { data: orgMember } = useFetch<OrganizationMemberType[]>(
+    ["orgMember"],
+    `/api/orgMember?orgId=${orgId}`
+  );
+
+  const orgMemberId = orgMember?.map(
+    (item: OrganizationMemberType) => item.userId
+  );
+
+  const users = data?.filter(
+    (user) =>
+      user.id !== session?.user?.id &&
+      user.emailVerified &&
+      !orgMemberId?.includes(user.id)
+  );
 
   const handleInvitation = (memberId: string) => {
     mutate({ params: memberId });
@@ -45,7 +59,6 @@ const OrganizationInvite = ({ orgId }: { orgId: string }) => {
         name="search-user"
         placeholder="find a name"
         onChange={(e) => {
-          console.log(e.target.value);
           setSearch(e.target.value);
         }}
       />
