@@ -17,6 +17,10 @@ const FadeInWrapper = ({
 
   let fadeIn;
 
+  useEffect(() => {
+    setIsvisible(true);
+  }, []);
+
   switch (variant) {
     case "top":
       fadeIn = isVisible
@@ -41,11 +45,6 @@ const FadeInWrapper = ({
     default:
       fadeIn = "opacity-100 translate-y-0";
   }
-
-  useEffect(() => {
-    setIsvisible(true);
-  }, []);
-
   return (
     <div
       className={`transition-all duration-1000 ease-in ${fadeIn}`}

@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
+import { SessionProvider } from "next-auth/react";
+
 import "./globals.css";
+import "@liveblocks/react-ui/styles.css";
+import "@liveblocks/react-tiptap/styles.css";
+import ModalProvider from "@/provider/modal-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +31,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full bg-gradient-to-tl from-primary/70 to-accent/20 `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full  `}
       >
-        <div className="w-full  min-h-screen mx-auto flex">{children}</div>
+        <SessionProvider>
+          <div className="w-full  min-h-screen mx-auto flex">{children}</div>
+        </SessionProvider>
+        <Toaster />
+        <ModalProvider />
       </body>
     </html>
   );

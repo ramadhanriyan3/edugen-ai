@@ -18,9 +18,16 @@ model User {
   phoneNumber   String?
   accounts      Account[]
   sessions      Session[]
-  Exam Exam[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  organization Organization[]
+
+  orgInvitation OrgInvitation[]
+
+  Worksheet Worksheet[]
+
+  OrganizationMember OrganizationMember[]
 }
  
 model Account {
@@ -66,32 +73,71 @@ model VerificationToken {
 }
 
 
-model Exam {
-  id String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
-  title String
-  questions Question[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete:Cascade)
-}
-
-
-
-model Question {
-  id String  @id @default(auto()) @map("_id") @db.ObjectId
-  examId String @db.ObjectId
-  content String
-  createdAt DateTime @default(now())
-
-  exam Exam @relation(fields: [examId], references: [id], onDelete:Cascade)
-}
-
-model news {
+model News {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   title String
   content String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Organization {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  ownerId String? @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizationMember OrganizationMember[]
+  orgInvitation OrgInvitation[]
+
+  worksheet Worksheet[]
+  
+  owners User? @relation(fields: [ownerId], references: [id])
+}
+
+enum MemberRole {
+  owner
+  member
+}
+
+model OrganizationMember {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  orgId String @db.ObjectId
+  role MemberRole
+  user User @relation(fields: [userId], references: [id])
+  organizaition Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  @@unique([userId, orgId])
+}
+
+enum InvitationStatus {
+  pending
+  accepted
+}
+
+model OrgInvitation {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId String? @db.ObjectId
+  invitedId String? @db.ObjectId
+  orgId String @db.ObjectId
+  status InvitationStatus
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  owner User? @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+}
+
+model Worksheet {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  ownerId String? @db.ObjectId
+  orgId String @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owners User? @relation(fields: [ownerId], references: [id])
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
 }
