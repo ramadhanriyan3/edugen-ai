@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { sheetId: string } }
+  { params }: { params: Promise<{ sheetId: string }> }
 ) {
   const { sheetId } = await params;
   const session = await auth();
@@ -32,7 +32,7 @@ export async function GET(
 // EDIT_SHET_INFO
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { sheetId: string } }
+  { params }: { params: Promise<{ sheetId: string }> }
 ) {
   const { searchParams } = new URL(req.url);
   const orgId = searchParams.get("orgId");
@@ -82,7 +82,7 @@ export async function PATCH(
 // DELETE WORKSEET
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { sheetId: string } }
+  { params }: { params: Promise<{ sheetId: string }> }
 ) {
   const { searchParams } = new URL(req.url);
   const orgId = searchParams.get("orgId");
